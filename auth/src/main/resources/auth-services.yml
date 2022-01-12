@@ -16,5 +16,5 @@ server:
 
 service:
   accountManager:
-    accountServiceId: accounts-service
+    accountServiceId: mag-service
 

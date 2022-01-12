@@ -5,8 +5,8 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serial;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -23,8 +23,8 @@ public class Role extends BaseEntity {
     @Column(unique = true, length = 100)
     private String code;
 
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
-    private List<Permission> permissions;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    private Set<Permission> permissions;
 
     @Override
     public boolean equals(Object o) {

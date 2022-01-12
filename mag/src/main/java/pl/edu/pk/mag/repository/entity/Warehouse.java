@@ -13,10 +13,12 @@ import java.io.Serial;
 @Getter
 @Setter
 @ToString
-public class Permission extends BaseEntity {
+public class Warehouse extends BaseEntity {
     @Serial
-    private static final long serialVersionUID = 1124235345L;
+    private static final long serialVersionUID = 11322512L;
 
-    @Column(unique = true, length = 100)
+    @Column(unique = true)
     private String code;
+
+
 }

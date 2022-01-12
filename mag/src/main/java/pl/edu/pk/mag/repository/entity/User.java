@@ -3,16 +3,15 @@ package pl.edu.pk.mag.repository.entity;
 
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serial;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -24,7 +23,7 @@ import java.util.Objects;
 public class User extends BaseEntity {
 
     @Serial
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 11322512L;
 
     @NotNull
     @Size(max = 50)
@@ -35,11 +34,14 @@ public class User extends BaseEntity {
 
     private boolean enabled;
 
-    private String email;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    private List<Role> roles;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private Set<Role> roles;
 
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY, targetEntity = Address.class, cascade = CascadeType.PERSIST)
+    private Address address;
 
     @Override
     public boolean equals(Object o) {
