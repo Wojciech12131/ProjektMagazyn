@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: auth-service
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.value}}
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:1111/eureka,http://localhost:2222/eureka
+  server:
+    wait-time-in-ms-when-sync-empty: 3000
+server:
+  port: 0
+
+service:
+  accountManager:
+    accountServiceId: accounts-service
+

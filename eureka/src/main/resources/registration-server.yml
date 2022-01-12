@@ -1,0 +1,38 @@
+
+spring:
+  profiles:
+    active:
+      - zone1
+  application:
+    name: discovery-service
+
+eureka:
+  instance:
+    instance-id: eureka:${server.port}
+    prefer-ip-address: true
+  server:
+    enable-self-preservation: true
+
+server:
+  use-forward-headers: true
+
+---
+spring:
+  profiles: zone1
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:2222/eureka/
+
+server:
+  port: 1111
+---
+spring:
+  profiles: zone2
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:1111/eureka/
+
+server:
+  port: 2222
