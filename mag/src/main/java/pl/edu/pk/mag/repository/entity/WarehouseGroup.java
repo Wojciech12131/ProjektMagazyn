@@ -14,7 +14,7 @@ import java.util.List;
 @ToString
 public class WarehouseGroup extends BaseEntity {
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "warehouse_id")
     private Warehouse warehouse;
 

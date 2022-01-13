@@ -26,7 +26,6 @@ public class Warehouse extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY, targetEntity = Address.class, cascade = CascadeType.PERSIST)
     private Address address;
 
-    @JoinColumn(name = "id", referencedColumnName = "warehouse_id")
     @OneToMany(fetch = FetchType.LAZY, targetEntity = WarehouseGroup.class, cascade = CascadeType.PERSIST)
     private Set<WarehouseGroup> warehouseGroup;
 
