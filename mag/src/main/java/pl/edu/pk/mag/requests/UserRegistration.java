@@ -1,8 +1,6 @@
 package pl.edu.pk.mag.requests;
 
 import lombok.Data;
-import pl.edu.pk.mag.repository.entity.Address;
-import pl.edu.pk.mag.repository.entity.User;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -24,13 +22,4 @@ public class UserRegistration {
     @Valid
     private UserAddressReg address;
 
-    public User convertToUser() {
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setEnabled(true);
-        Address address = new Address(getAddress().getEmail(), getAddress().getMobile());
-        user.setAddress(address);
-        return user;
-    }
 }
