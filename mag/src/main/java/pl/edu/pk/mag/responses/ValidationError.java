@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class ValidationError {
         public static ValidationError fromBindingErrors(Errors errors) {
             ValidationError error = new ValidationError();
             for (ObjectError objectError : errors.getAllErrors()) {
-                error.addValidationError((" " + objectError.getDefaultMessage()));
+                error.addValidationError((((FieldError) objectError).getField() + " " + objectError.getDefaultMessage()));
             }
             return error;
         }

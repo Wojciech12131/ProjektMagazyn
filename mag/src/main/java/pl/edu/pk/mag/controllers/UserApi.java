@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pk.mag.exceptions.ApplicationException;
 import pl.edu.pk.mag.requests.UserRegistration;
+import pl.edu.pk.mag.responses.UserToLogin;
 import pl.edu.pk.mag.service.UserService;
 
 import javax.validation.Valid;
@@ -25,7 +26,8 @@ public class UserApi {
     public ResponseEntity<?> getUserByUsername(@PathVariable(name = "username") String username) {
         if (username == null || StringUtils.isBlank(username))
             throw new ApplicationException("MISSING_PARAM", 404, "Nie podano obowiązkowego parametru: username");
-        return new ResponseEntity<>(userService.getUserByUsername(username), HttpStatus.OK);
+        UserToLogin userToLogin = userService.getUserByUsername(username);
+        return new ResponseEntity<>(userToLogin, HttpStatus.OK);
     }
 
     @PostMapping

@@ -49,9 +49,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new AuthorizationServiceException("Problem z serwisem autoryzacji, proszę spróbować później");
         }
         User user = responseEntity.getBody();
-//        User user = new User();
-//        user.setUsername("admin");
-//        user.setPassword(passwordEncoder.encode("admin"));
         if (user != null) {
             accountStatusUserDetailsChecker.check(user);
         } else {

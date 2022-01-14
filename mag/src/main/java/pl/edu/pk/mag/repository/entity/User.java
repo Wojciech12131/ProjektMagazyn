@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serial;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -42,6 +43,10 @@ public class User extends BaseEntity {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     @OneToOne(fetch = FetchType.LAZY, targetEntity = Address.class, cascade = CascadeType.PERSIST)
     private Address address;
+
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = WarehouseGroup.class, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "id", referencedColumnName = "user_id")
+    private List<WarehouseGroup> warehouseGroups;
 
     @Override
     public boolean equals(Object o) {

@@ -18,6 +18,10 @@ public class WarehouseGroup extends BaseEntity {
     @JoinColumn(name = "warehouse_id")
     private Warehouse warehouse;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     private List<WPermission> wPermissions;
 

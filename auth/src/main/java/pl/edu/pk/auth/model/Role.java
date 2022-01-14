@@ -10,6 +10,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Role {
-    private String name;
+    private String code;
     private List<Permission> permissions;
 }
