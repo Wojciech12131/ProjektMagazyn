@@ -17,6 +17,7 @@ import pl.edu.pk.mag.responses.WarehouseMembers;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class WarehouseService {
@@ -112,7 +113,19 @@ public class WarehouseService {
 
     public List<WarehouseMembers> getWarehouseMembers(String whCode) {
         Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
+        Set<WarehouseGroup> warehouseGroups = warehouse.getWarehouseGroup();
+        List<WarehouseMembers> warehouseMembers = new ArrayList<>();
+        warehouseGroups.stream().forEach(
+                warehouseGroup ->
+                {
+                    WarehouseMembers warehouseMember = new WarehouseMembers(warehouseGroup.getUser().getUsername(), new ArrayList<>());
+                    for (WPermission perm : warehouseGroup.getWPermissions()
+                    ) {
+                        warehouseMember.getWarehousePermissions().add(perm.getCode());
+                    }
+                }
+        );
 
-        return null;
+        return warehouseMembers;
     }
 }

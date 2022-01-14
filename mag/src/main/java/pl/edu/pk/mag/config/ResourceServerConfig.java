@@ -18,11 +18,15 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import pl.edu.pk.mag.exceptions.handlers.CustomAccessDeniedHandler;
 import pl.edu.pk.mag.exceptions.handlers.CustomAuthenticationEntryPoint;
 import pl.edu.pk.mag.exceptions.handlers.ExceptionHandling;
 import pl.edu.pk.mag.exceptions.handlers.ResponseErrorHandlerImpl;
 import pl.edu.pk.mag.filters.OauthErrorHandleFilter;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -59,6 +63,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http.headers().frameOptions().disable().and()
                 .addFilterBefore(oauthErrorHandleFilter, AbstractPreAuthenticatedProcessingFilter.class)
                 .httpBasic().disable().formLogin().disable()
+                .csrf().disable()
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
                 .authenticationEntryPoint(authenticationEntryPoint()).and().exceptionHandling().and()
                 .authorizeRequests()
@@ -66,6 +71,18 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/mag/user").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/**").authenticated();
+    }
+
+    @Bean
+    public UrlBasedCorsConfigurationSource configurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:3000"));
+        corsConfiguration.setAllowedMethods(Arrays.asList("OPTIONS", "GET", "POST", "DELETE", "HEAD"));
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
     }
 
     @Bean

@@ -24,6 +24,5 @@ public class AspectTest {
                 if(authentication.getUserAuthentication()!=null&& authentication.getUserAuthentication().getDetails() instanceof CustomWebAuthenticationDetails details)
                 parameters.put("password", details.getPassword());
             }
-        System.out.println("Test");
     }
 }

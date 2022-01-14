@@ -5,13 +5,11 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextStartedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import pl.edu.pk.mag.repository.PermissionRepository;
-import pl.edu.pk.mag.repository.RoleRepository;
-import pl.edu.pk.mag.repository.UserRepository;
-import pl.edu.pk.mag.repository.WarehouseRepository;
+import pl.edu.pk.mag.repository.*;
 import pl.edu.pk.mag.repository.entity.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -22,6 +20,9 @@ public class StartupListener implements ApplicationListener<ContextStartedEvent>
 
     @Autowired
     private WarehouseRepository warehouseRepository;
+
+    @Autowired
+    private WarehouseGroupPermissionRepository warehouseGroupPermissionRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -36,9 +37,16 @@ public class StartupListener implements ApplicationListener<ContextStartedEvent>
     public void onApplicationEvent(ContextStartedEvent event) {
 
         Permission warehouseCreateNew = Permission.builder().code("WAREHOUSE.CREATE.NEW").build();
+        Permission warehouseAddMember = Permission.builder().code("WAREHOUSE.ADD.USER").build();
         permissionRepository.saveAndFlush(warehouseCreateNew);
+        permissionRepository.saveAndFlush(warehouseAddMember);
 
-        Role role = new Role("admin", Set.of(warehouseCreateNew));
+        WPermission addMember = WPermission.builder().code("ADD.MEMBER").build();
+        WPermission removeMember = WPermission.builder().code("REMOVE.MEMBER").build();
+        warehouseGroupPermissionRepository.saveAll(List.of(addMember, removeMember));
+        warehouseGroupPermissionRepository.flush();
+
+        Role role = new Role("admin", Set.of(warehouseCreateNew, warehouseAddMember));
         roleRepository.saveAndFlush(role);
 
         User user = new User();
