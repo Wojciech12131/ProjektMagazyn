@@ -8,7 +8,9 @@ public enum AppException {
     WAREHOUSE_CODE_NOT_UNIQUE("WAREHOUSE_CODE_NOT_UNIQUE", 400, "Nie unikatowa nazwa magazynu."),
     LOGIN_ERROR("LOGIN_ERROR", 403, "Podano nieporawny login lub hasło."),
     NOT_FOUND_BOOK("NOT_FOUND", 404, "Nie znaleziono książki o podanym id."),
-    INVALID_PATH_VARIABLE("INVALID_PATH_VARIABLE", 400, "Podano niepoprawną wartość zmiennej w adresie.");
+    INVALID_PATH_VARIABLE("INVALID_PATH_VARIABLE", 400, "Podano niepoprawną wartość zmiennej w adresie."),
+    NOT_FOUND_PERMISSION("NOT_FOUND_PERMISSION", 404, "Podano niepoprawne uprawnienie");
+
 
     final ApplicationException applicationException;
 

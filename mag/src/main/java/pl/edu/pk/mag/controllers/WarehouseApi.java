@@ -25,12 +25,18 @@ public class WarehouseApi {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping(path = "/addUser/{whCode}")
+    @PostMapping(path = "/{whCode}/addUser")
     @PreAuthorize(value = "hasAuthority('WAREHOUSE.ADD.USER')")
     public ResponseEntity<?> addUserToWarehouse(@RequestBody @Valid AddUserToWarehouse addUserToWarehouse, @PathVariable(name = "whCode", required = true) String whCode) {
         warehouseService.addUserToWarehouse(addUserToWarehouse, whCode);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping(path = "/{whCode}/getMembers")
+    public ResponseEntity<?> getWarehouseMembers(@PathVariable String whCode) {
+        return ResponseEntity.ok(warehouseService.getWarehouseMembers(whCode));
+    }
+
 
     @GetMapping
     public ResponseEntity<?> getWarehouseList() {

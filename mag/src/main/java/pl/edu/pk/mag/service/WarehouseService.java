@@ -4,16 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pk.mag.exceptions.AppException;
 import pl.edu.pk.mag.repository.UserRepository;
+import pl.edu.pk.mag.repository.WarehouseGroupPermissionRepository;
+import pl.edu.pk.mag.repository.WarehouseGroupRepository;
 import pl.edu.pk.mag.repository.WarehouseRepository;
-import pl.edu.pk.mag.repository.entity.Address;
-import pl.edu.pk.mag.repository.entity.User;
-import pl.edu.pk.mag.repository.entity.Warehouse;
+import pl.edu.pk.mag.repository.entity.*;
 import pl.edu.pk.mag.requests.warehouse.AddUserToWarehouse;
 import pl.edu.pk.mag.requests.warehouse.CreateWarehouse;
 import pl.edu.pk.mag.responses.AddressResponse;
 import pl.edu.pk.mag.responses.WarehouseListResponse;
+import pl.edu.pk.mag.responses.WarehouseMembers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -21,6 +23,12 @@ public class WarehouseService {
 
     @Autowired
     private WarehouseRepository warehouseRepository;
+
+    @Autowired
+    private WarehouseGroupRepository warehouseGroupRepository;
+
+    @Autowired
+    private WarehouseGroupPermissionRepository warehouseGroupPermissionRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -70,7 +78,7 @@ public class WarehouseService {
     public void addUserToWarehouse(AddUserToWarehouse addUserToWarehouse, String whCode) {
         User user = userRepository.getUserByUsername(addUserToWarehouse.getUsername()).orElseThrow(AppException.NOT_FOUND_USER::getError);
         Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
-        if (user.getWarehouseGroups().stream().anyMatch(a -> a.getWarehouse().getCode().equals(whCode))) {
+        if (user.getWarehouseGroups().stream().anyMatch(a -> a.getWarehouse().getCode().equals(warehouse.getCode()))) {
             putWarehousePermissions(addUserToWarehouse, warehouse, user);
         } else {
             createNewWarehouseMember(addUserToWarehouse, warehouse, user);
@@ -78,10 +86,33 @@ public class WarehouseService {
     }
 
     private void putWarehousePermissions(AddUserToWarehouse addUserToWarehouse, Warehouse warehouse, User user) {
-
+        WarehouseGroup warehouseGroup = user.getWarehouseGroups()
+                .stream().filter(a -> a.getWarehouse().getCode().equals(warehouse.getCode())).findFirst().orElseThrow();
+        warehouseGroup.setWPermissions(getGroupPermission(addUserToWarehouse));
+        warehouseGroupRepository.saveAndFlush(warehouseGroup);
     }
 
     private void createNewWarehouseMember(AddUserToWarehouse addUserToWarehouse, Warehouse warehouse, User user) {
-        
+        if (warehouse.getWarehouseGroup() == null)
+            warehouse.setWarehouseGroup(new HashSet<>());
+        List<WPermission> wPermissions = getGroupPermission(addUserToWarehouse);
+        WarehouseGroup warehouseGroup = new WarehouseGroup(warehouse, user, wPermissions);
+        warehouseGroupRepository.saveAndFlush(warehouseGroup);
+    }
+
+    private List<WPermission> getGroupPermission(AddUserToWarehouse addUserToWarehouse) {
+        List<WPermission> wPermissions = new ArrayList<>();
+        for (String permission : addUserToWarehouse.getWhPermissions()
+        ) {
+            WPermission wPermission = warehouseGroupPermissionRepository.getWPermissionByCode(permission).orElseThrow(AppException.NOT_FOUND_PERMISSION::getError);
+            wPermissions.add(wPermission);
+        }
+        return wPermissions;
+    }
+
+    public List<WarehouseMembers> getWarehouseMembers(String whCode) {
+        Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
+
+        return null;
     }
 }
