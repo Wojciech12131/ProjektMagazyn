@@ -28,7 +28,7 @@ function showError() {
 function setErrorAlert(error) {
     document.getElementById("errorMsg").innerHTML = "" +
         "<div class=\"alert alert-danger alert-dismissible fade show\" style=\"margin-top: 10px\" role=\"alert\">\n" +
-        "     <strong>Błąd!</strong> " + error.errorMessage + "\n" +
+        "     <strong>Error!</strong> " + error.errorMessage + "\n" +
         setValidationErrors(error) +
         "     <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
         "     <span aria-hidden=\"true\">&times;</span>\n" +

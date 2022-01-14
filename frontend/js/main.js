@@ -8,8 +8,7 @@ function login() {
     http_request.onload = function (xhr) {
         if (xhr.target.status === 200) {
             const data = JSON.parse(xhr.target.response);
-            setCookie("ROLE", data, 1);
-            location.href = "books.html"
+            setCookie("access_token", data, 1);
         } else {
             handleExceptions(xhr.target.response);
             showError();
@@ -17,13 +16,31 @@ function login() {
     }
     http_request.open("POST", url, true);
     http_request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    http_request.send(JSON.stringify(body))
+    http_request.send(JSON.stringify(body));
 }
+
 function register(){
     let http_request = new XMLHttpRequest();
     http_request.withCredentials = true;
-    const address = new address(document.getElementById("mobile"), document.getElementById("email"));
-    const body = new registrationForm(document.getElementById("username").value, document.getElementById("password").value, address);
+    var body;
+    http_request.onload = function (xhr) {
+        if (xhr.target.status === 204) {
+            location.href = "index.html";
+        } else {
+            handleExceptions(xhr.target.response);
+            showError();
+        }
+    }
+    if(document.getElementById("username").value!="" && document.getElementById("password").value!="" && document.getElementById("mobile").value!="" && document.getElementById("email").value!="") {
+        const address = new address(document.getElementById("mobile").value, document.getElementById("email").value);
+        body = new registrationForm(document.getElementById("username").value, document.getElementById("password").value, address);
+        http_request.open("POST", url, true);
+        http_request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        http_request.send(JSON.stringify(body))
+    } else {
+        handleExceptions("{\"errorMessage\":\"Empty Field/s\"}");
+        showError();
+    }
 }
 class address {
     constructor(mobile, mail) {
