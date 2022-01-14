@@ -25,7 +25,7 @@ import pl.edu.pk.mag.exceptions.handlers.CustomAuthenticationEntryPoint;
 import pl.edu.pk.mag.exceptions.handlers.ResponseErrorHandlerImpl;
 import pl.edu.pk.mag.filters.OauthErrorHandleFilter;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -72,10 +72,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Bean
     public UrlBasedCorsConfigurationSource configurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:3000"));
-        corsConfiguration.setAllowedMethods(Arrays.asList("OPTIONS", "GET", "POST", "DELETE", "HEAD"));
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:3000/"));
+        corsConfiguration.setAllowedMethods(List.of("*"));
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        corsConfiguration.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;

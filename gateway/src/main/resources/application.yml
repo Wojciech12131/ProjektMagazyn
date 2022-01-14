@@ -5,20 +5,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:1111/eureka,http://localhost:2222/eureka
-
 spring:
   application:
     name: gateway-service
-  cloud:
-    gateway:
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "http://localhost:3000"
-            allowedMethods:
-              - GET
-              - POST
-              - OPTIONS
-              - DELETE
-              - HEAD'
+
 

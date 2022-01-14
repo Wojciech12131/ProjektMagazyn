@@ -1,9 +1,10 @@
 const url = "http://localhost:8000/oauth/token";
 
 function login() {
+    const url = "http://localhost:8000/oauth/token";
     let http_request = new XMLHttpRequest();
     http_request.withCredentials = true;
-    const body = new loginRequest(document.getElementById("username").value, document.getElementById("password").value);
+    const body = new LoginRequest(document.getElementById("username").value, document.getElementById("password").value);
 
     http_request.onload = function (xhr) {
         if (xhr.target.status === 200) {
@@ -19,7 +20,8 @@ function login() {
     http_request.send(JSON.stringify(body));
 }
 
-function register(){
+function register() {
+    const url = "http://localhost:8000/mag/token";
     let http_request = new XMLHttpRequest();
     http_request.withCredentials = true;
     var body;
@@ -31,9 +33,9 @@ function register(){
             showError();
         }
     }
-    if(document.getElementById("username").value!="" && document.getElementById("password").value!="" && document.getElementById("mobile").value!="" && document.getElementById("email").value!="") {
-        const address = new address(document.getElementById("mobile").value, document.getElementById("email").value);
-        body = new registrationForm(document.getElementById("username").value, document.getElementById("password").value, address);
+    if (document.getElementById("username").value !== "" && document.getElementById("password").value !== "" && document.getElementById("mobile").value !== "" && document.getElementById("email").value !== "") {
+        const address = new Address(document.getElementById("mobile").value, document.getElementById("email").value);
+        body = new RegistrationForm(document.getElementById("username").value, document.getElementById("password").value, address);
         http_request.open("POST", url, true);
         http_request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         http_request.send(JSON.stringify(body))
@@ -42,20 +44,23 @@ function register(){
         showError();
     }
 }
-class address {
+
+class Address {
     constructor(mobile, mail) {
         this.mobile = mobile;
         this.mail = mail;
     }
 }
-class registrationForm {
+
+class RegistrationForm {
     constructor(username, password, address) {
         this.username = username;
         this.password = password;
         this.address = address;
     }
 }
-class loginRequest {
+
+class LoginRequest {
     constructor(username, password) {
         this.username = username;
         this.password = password;
