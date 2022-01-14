@@ -22,7 +22,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import pl.edu.pk.mag.exceptions.handlers.CustomAccessDeniedHandler;
 import pl.edu.pk.mag.exceptions.handlers.CustomAuthenticationEntryPoint;
-import pl.edu.pk.mag.exceptions.handlers.ExceptionHandling;
 import pl.edu.pk.mag.exceptions.handlers.ResponseErrorHandlerImpl;
 import pl.edu.pk.mag.filters.OauthErrorHandleFilter;
 
@@ -31,9 +30,6 @@ import java.util.Arrays;
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-
-    @Autowired
-    private ExceptionHandling exceptionHandling;
 
     @Autowired
     private OauthErrorHandleFilter oauthErrorHandleFilter;
