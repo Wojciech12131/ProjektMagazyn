@@ -9,8 +9,8 @@
         <outputRelativeToContentRoot value="true" />
         <module name="mag" />
         <module name="auth" />
-        <module name="eureka" />
         <module name="gateway" />
+        <module name="eureka" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="17">

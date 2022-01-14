@@ -1,4 +1,4 @@
-const url = "http://localhost:8080/login";
+const url = "http://localhost:8000/oauth/token";
 
 function login() {
     let http_request = new XMLHttpRequest();
@@ -19,7 +19,25 @@ function login() {
     http_request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     http_request.send(JSON.stringify(body))
 }
-
+function register(){
+    let http_request = new XMLHttpRequest();
+    http_request.withCredentials = true;
+    const address = new address(document.getElementById("mobile"), document.getElementById("email"));
+    const body = new registrationForm(document.getElementById("username").value, document.getElementById("password").value, address);
+}
+class address {
+    constructor(mobile, mail) {
+        this.mobile = mobile;
+        this.mail = mail;
+    }
+}
+class registrationForm {
+    constructor(username, password, address) {
+        this.username = username;
+        this.password = password;
+        this.address = address;
+    }
+}
 class loginRequest {
     constructor(username, password) {
         this.username = username;
