@@ -14,13 +14,13 @@ import java.util.List;
 @ToString
 public class WarehouseGroup extends BaseEntity {
 
-    @ManyToOne
     @JoinColumn(name = "warehouse_id")
-    private Warehouse warehouse;
+    @Column(name = "warehouse_id")
+    private Long warehouseId;
 
-    @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<WPermission> wPermissions;

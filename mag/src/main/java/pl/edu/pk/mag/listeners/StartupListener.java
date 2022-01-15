@@ -38,15 +38,17 @@ public class StartupListener implements ApplicationListener<ContextStartedEvent>
 
         Permission warehouseCreateNew = Permission.builder().code("WAREHOUSE.CREATE.NEW").build();
         Permission warehouseAddMember = Permission.builder().code("WAREHOUSE.ADD.USER").build();
+        Permission warehouseGetMember = Permission.builder().code("WAREHOUSE.GET.MEMBER").build();
         permissionRepository.saveAndFlush(warehouseCreateNew);
         permissionRepository.saveAndFlush(warehouseAddMember);
+        permissionRepository.saveAndFlush(warehouseGetMember);
+        Role role = new Role("admin", Set.of(warehouseCreateNew, warehouseAddMember, warehouseGetMember));
 
         WPermission addMember = WPermission.builder().code("ADD.MEMBER").build();
         WPermission removeMember = WPermission.builder().code("REMOVE.MEMBER").build();
         warehouseGroupPermissionRepository.saveAll(List.of(addMember, removeMember));
         warehouseGroupPermissionRepository.flush();
 
-        Role role = new Role("admin", Set.of(warehouseCreateNew, warehouseAddMember));
         roleRepository.saveAndFlush(role);
 
         User user = new User();

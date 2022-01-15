@@ -12,5 +12,5 @@ public class AddUserToWarehouse {
     @Size(max = 50)
     private String username;
 
-    private List<String> whPermissions = new ArrayList<>();
+    private List<String> warehousePermissions = new ArrayList<>();
 }
