@@ -71,7 +71,7 @@ public class WarehouseApi {
     @PreAuthorize(value = "@warehouseService.isMemberAndHavePermission(#principal.getName(),#whCode,'MODIFY_SHELFS')||hasAuthority('WAREHOUSE.GET.STORAGE.LOCATION')")
     public ResponseEntity<?> addShelf(Principal principal, @PathVariable(name = "whCode") String whCode, @RequestParam(name = "shelfCode") String shelfCode) {
         warehouseService.addNewShelf(whCode, shelfCode);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping(path = "/code/{whCode}/SearchByProduct")
