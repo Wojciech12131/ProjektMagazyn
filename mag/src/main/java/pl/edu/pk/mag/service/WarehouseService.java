@@ -9,6 +9,7 @@ import pl.edu.pk.mag.repository.*;
 import pl.edu.pk.mag.repository.entity.*;
 import pl.edu.pk.mag.requests.warehouse.AddUserToWarehouse;
 import pl.edu.pk.mag.requests.warehouse.CreateWarehouse;
+import pl.edu.pk.mag.requests.warehouse.PatchWarehouse;
 import pl.edu.pk.mag.responses.*;
 
 import java.math.BigDecimal;
@@ -247,5 +248,12 @@ public class WarehouseService {
         if (storageLocationRepository.existsStorageLocationByWarehouseIdAndCode(warehouse.getId(), shelfCode))
             throw AppException.SHELF_ALREADY_EXISTED.getError();
         storageLocationRepository.save(new StorageLocation(shelfCode, warehouse.getId(), null, new BigDecimal("0.000")));
+    }
+
+    public void patchWarehouse(PatchWarehouse patchWarehouse, String whCode) {
+        Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
+        if (patchWarehouse.getDescription() != null) {
+            warehouse.setDescription(patchWarehouse.getDescription());
+        }
     }
 }

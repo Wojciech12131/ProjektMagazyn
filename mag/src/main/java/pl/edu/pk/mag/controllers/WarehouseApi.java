@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pk.mag.requests.warehouse.AddUserToWarehouse;
 import pl.edu.pk.mag.requests.warehouse.CreateWarehouse;
+import pl.edu.pk.mag.requests.warehouse.PatchWarehouse;
 import pl.edu.pk.mag.responses.WarehouseListResponse;
 import pl.edu.pk.mag.service.WarehouseService;
 
@@ -51,6 +52,13 @@ public class WarehouseApi {
         return ResponseEntity.ok(warehouseService.getWarehouseStorageLocation(whCode));
     }
 
+    @PatchMapping(path = "/code/{whCode}")
+    @PreAuthorize(value = "@warehouseService.isMemberAndHavePermission(#principal.getName(),#whCode,'MODIFY_WAREHOUSE')||hasAuthority('WAREHOUSE.CREATE.NEW')")
+    public ResponseEntity<?> modifyWarehouse(Principal principal, @PathVariable String whCode, @RequestBody @Valid PatchWarehouse patchWarehouse) {
+        warehouseService.patchWarehouse(patchWarehouse, whCode);
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping(path = "/code/{whCode}/modifyShelf")
     @PreAuthorize(value = "@warehouseService.isMemberAndHavePermission(#principal.getName(),#whCode,'MODIFY_SHELFS')||hasAuthority('WAREHOUSE.GET.STORAGE.LOCATION')")
     @Transactional
@@ -61,9 +69,9 @@ public class WarehouseApi {
 
     @GetMapping(path = "/code/{whCode}/addShelf")
     @PreAuthorize(value = "@warehouseService.isMemberAndHavePermission(#principal.getName(),#whCode,'MODIFY_SHELFS')||hasAuthority('WAREHOUSE.GET.STORAGE.LOCATION')")
-    public ResponseEntity<?> addShelf(@PathVariable(name = "whCode") String whCode, @RequestParam(name = "shelfCode") String shelfCode) {
+    public ResponseEntity<?> addShelf(Principal principal, @PathVariable(name = "whCode") String whCode, @RequestParam(name = "shelfCode") String shelfCode) {
         warehouseService.addNewShelf(whCode, shelfCode);
-        return ResponseEntity.ok(warehouseService.getWarehouseStorageLocationByProduct(whCode, shelfCode));
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(path = "/code/{whCode}/SearchByProduct")
