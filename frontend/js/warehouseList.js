@@ -1,4 +1,5 @@
 var url = "http://localhost:8000/mag/warehouse/myWh";
+var url2 = "http://localhost:8000/mag/user/myPerm";
 
 function loadWarehouseList() {
     let http_request = new XMLHttpRequest();
@@ -29,6 +30,63 @@ function loadWarehouseList() {
     }
     else location.href = "index.html";
     http_request.send(null);
+}
+
+function loadExtraPerms() {
+    let http_request = new XMLHttpRequest();
+    http_request.withCredentials = true;
+    http_request.onreadystatechange = function (xhr) {
+        if (xhr.target.status === 200) {
+            var list = JSON.parse(xhr.target.response);
+            extraPerms(list);
+            clearError();
+        } else if (xhr.target.status === 403) {
+            let data = JSON.parse(xhr.target.response);
+            if (data.errorCode === "ACCESS_DENIED") {
+                data.errorMessage = "Session expired, login again"
+                handleExceptions(JSON.stringify(data));
+                location.href = "index.html"
+            }
+            handleExceptions(JSON.stringify(data));
+            showError();
+        } else {
+            handleExceptions(xhr.target.response);
+            showError();
+        }
+    };
+    console.log(getCookie('access_token'));
+    http_request.open('GET', url2, true);
+    if (getCookie('access_token') !== null && getCookie('access_token') !== "") {
+        http_request.setRequestHeader('Authorization', 'Bearer ' + getCookie('access_token'));
+    }
+    else location.href = "index.html";
+    http_request.send(null);
+}
+
+function extraPerms(list) {
+    var myList = [];
+    var htmlList = [];
+    if (list.includes("WAREHOUSE.CREATE.NEW")) {
+        myList.push("Create WH");
+        htmlList.push("whCreateNew.html");
+    }
+    if (list.includes("WAREHOUSE.ADD.USER")) {
+        myList.push("Add user");
+        htmlList.push("whAddUser.html");
+    }
+    if (list.includes("WAREHOUSE.GET.MEMBER")) {
+        myList.push("Check worker WHs");
+        htmlList.push("whGetMember.html");
+    }
+    if (list.includes("WAREHOUSE.GET.STORAGE.LOCATION")) {
+        myList.push("Check products in WHs");
+        htmlList.push("whGetStorageLocation.html");
+    }
+    var button = "";
+    for (let i=0; i<myList.length; i++) {
+        button = button + " <button class=\"btn btn-warning\" onclick= location.href="+htmlList[i]+">"+myList[i]+"</button>";
+    }
+    document.getElementById("buttons").innerHTML = button;
 }
 
 function setTable(data) {
@@ -67,7 +125,8 @@ function delete_cookie(name) {
 function goToWarehouse(element){
     var p = element.parentNode.parentNode;
     let id = p.firstElementChild.textContent;
-
+    sessionStorage.setItem('code', id);
+    location.href = "storageProductList.html";
 }
 
 class Warehouse {
