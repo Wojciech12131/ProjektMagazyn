@@ -14,9 +14,11 @@ public enum AppException {
     NOT_FOUND_SHELF("NOT_FOUND_SHELF", 404, "Nie znaleziono wskazanej półki w danym magazynie"),
     NOT_FOUND_DESTINATION_SHELF("NOT_FOUND_DESTINATION_SHELF", 404, "Nie znaleziono półki docelowej"),
     DESTINATION_SHELF_IS_NOT_EMPTY("DESTINATION_SHELF_IS_NOT_EMPTY", 400, "Na docelowej półce znajduję się już produkt."),
-    NOT_FOUND_PRODUCT("NOT_FOUND_PRODUCT", 404, ""),
-    SHELF_CODE_ID_EMPTY_OR_NULL("SHELF_CODE_ID_EMPTY_OR_NULL", 400, ""),
-    SHELF_ALREADY_EXISTED("SHELF_ALREADY_EXISTED", 400, "Istnieje już półka o danym kodzie.");
+    DESTINATION_SHELF_IS_EMPTY("DESTINATION_SHELF_IS__EMPTY", 400, "Na docelowej półce nie znajduję się produkt, nie można dodać do niego ilości."),
+    NOT_FOUND_PRODUCT("NOT_FOUND_PRODUCT", 404, "Nie znaleziono prodkuktu o podanym kodzie."),
+    SHELF_CODE_ID_EMPTY_OR_NULL("SHELF_CODE_ID_EMPTY_OR_NULL", 400, "Kod półki nie może być pusty."),
+    SHELF_ALREADY_EXISTED("SHELF_ALREADY_EXISTED", 400, "Istnieje już półka o danym kodzie."),
+    ADD_QUANTITY_IS_NOT_POSSIBLE("ADD_QUANTITY_IS_NOT_POSSIBLE", 400, "Nie można dodać ilości do edytowanego produku.");
 
 
     final ApplicationException applicationException;

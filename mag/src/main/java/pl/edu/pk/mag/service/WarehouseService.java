@@ -12,6 +12,7 @@ import pl.edu.pk.mag.requests.warehouse.CreateWarehouse;
 import pl.edu.pk.mag.responses.*;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -178,7 +179,15 @@ public class WarehouseService {
             moveProductToAnotherLocation(modifyStorageLocation, storageLocation, warehouse);
         if (modifyStorageLocation.getAddProduct() != null)
             addProductToStorageLocation(modifyStorageLocation, storageLocation);
+        if (modifyStorageLocation.getAddProduct() != null)
+            addQuantityToProduct(modifyStorageLocation, storageLocation);
         storageLocationRepository.save(storageLocation);
+    }
+
+    private void addQuantityToProduct(ModifyStorageLocation modifyStorageLocation, StorageLocation storageLocation) {
+        if (storageLocation.getProductId() == null)
+            throw AppException.DESTINATION_SHELF_IS_EMPTY.getError();
+        storageLocation.setQuantity(storageLocation.getQuantity().add(modifyStorageLocation.getAddQuantity().getQuantity(), MathContext.UNLIMITED));
     }
 
     private void removeProductFromStorage(StorageLocation storageLocation) {
@@ -188,8 +197,12 @@ public class WarehouseService {
 
     private void validateModifyBody(ModifyStorageLocation modifyStorageLocation) {
         if (modifyStorageLocation.isRemoveProduct() &&
-                modifyStorageLocation.getMoveProduct() != null && modifyStorageLocation.getMoveProduct().getDestinationShelfCode() != null)
+                modifyStorageLocation.getMoveProduct() != null)
             throw AppException.REMOVE_AND_MOVE_NOT_POSSIBLE.getError();
+        if (modifyStorageLocation.getAddQuantity() != null &&
+                (modifyStorageLocation.isRemoveProduct() || modifyStorageLocation.getMoveProduct() != null || modifyStorageLocation.getAddProduct() != null)) {
+            throw AppException.ADD_QUANTITY_IS_NOT_POSSIBLE.getError();
+        }
     }
 
     private void moveProductToAnotherLocation(ModifyStorageLocation modifyStorageLocation, StorageLocation storageLocation, Warehouse warehouse) {

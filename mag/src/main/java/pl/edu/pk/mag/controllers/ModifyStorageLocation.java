@@ -20,6 +20,9 @@ public class ModifyStorageLocation {
     private AddProductToStorageLocation addProduct;
     @Valid
     private MoveProduct moveProduct;
+    @Valid
+    private AddQuantity addQuantity;
+
     private boolean removeProduct;
 
     @Data
@@ -38,7 +41,15 @@ public class ModifyStorageLocation {
     @Data
     public static class MoveProduct {
         @Size(max = 50)
+        @NotNull
         String destinationShelfCode;
+    }
+
+    @Data
+    public static class AddQuantity {
+        @Digits(fraction = 3, integer = 10)
+        @NotNull
+        private BigDecimal quantity = new BigDecimal("0.000");
     }
 
 }
