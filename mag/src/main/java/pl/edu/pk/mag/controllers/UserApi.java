@@ -5,6 +5,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,8 @@ import pl.edu.pk.mag.responses.UserToLogin;
 import pl.edu.pk.mag.service.UserService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -33,7 +36,13 @@ public class UserApi {
 
     @GetMapping(path = "/myPerm")
     public ResponseEntity<?> getMyPermissions() {
-        return ResponseEntity.ok(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+        List<String> permissions = new ArrayList<>();
+        for (GrantedAuthority g : SecurityContextHolder.getContext().getAuthentication().getAuthorities()
+        ) {
+            permissions.add(g.getAuthority());
+        }
+        SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        return ResponseEntity.ok(permissions);
     }
 
     @PostMapping
