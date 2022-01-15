@@ -47,7 +47,7 @@ public class WarehouseApi {
         return ResponseEntity.ok(warehouseService.getWarehouseStorageLocation(whCode));
     }
 
-    @GetMapping(path = "/code/myWh")
+    @GetMapping(path = "/myWh")
     public ResponseEntity<?> getMyWarehouseList(Principal principal) {
         List<WarehouseListResponse> list = new ArrayList<>();
         if (principal.getName() != null)

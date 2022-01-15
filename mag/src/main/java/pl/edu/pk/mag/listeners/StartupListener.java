@@ -66,6 +66,8 @@ public class StartupListener implements ApplicationListener<ContextStartedEvent>
         user.setRoles(Set.of(role));
         user = userRepository.saveAndFlush(user);
 
+        User user1 = new User();
+
         Warehouse warehouse = new Warehouse();
         warehouse.setCode("testWh");
         warehouse.setDescription("testowy magazyn");
