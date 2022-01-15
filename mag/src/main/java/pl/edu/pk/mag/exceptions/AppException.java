@@ -9,7 +9,11 @@ public enum AppException {
     LOGIN_ERROR("LOGIN_ERROR", 403, "Podano nieporawny login lub hasło."),
     NOT_FOUND_BOOK("NOT_FOUND", 404, "Nie znaleziono książki o podanym id."),
     INVALID_PATH_VARIABLE("INVALID_PATH_VARIABLE", 400, "Podano niepoprawną wartość zmiennej w adresie."),
-    NOT_FOUND_PERMISSION("NOT_FOUND_PERMISSION", 404, "Podano niepoprawne uprawnienie");
+    NOT_FOUND_PERMISSION("NOT_FOUND_PERMISSION", 404, "Podano niepoprawne uprawnienie"),
+    REMOVE_AND_MOVE_NOT_POSSIBLE("REMOVE_AND_MOVE_NOT_POSSIBLE", 400, "Nie można jednocześnie usunąć i przenieść gdzieś indziej produktu."),
+    NOT_FOUND_SHELF("NOT_FOUND_SHELF", 404, "Nie znaleziono wskazanej półki w danym magazynie"),
+    NOT_FOUND_DESTINATION_SHELF("NOT_FOUND_DESTINATION_SHELF", 404, "Nie znaleziono półki docelowej"),
+    DESTINATION_SHELF_IS_NOT_EMPTY("DESTINATION_SHELF_IS_NOT_EMPTY", 400, "Na docelowej półce znajduję się już produkt.");
 
 
     final ApplicationException applicationException;

@@ -52,6 +52,7 @@ public class StartupListener implements ApplicationListener<ContextStartedEvent>
 
         WPermission addMember = WPermission.builder().code("ADD.MEMBER").build();
         WPermission removeMember = WPermission.builder().code("REMOVE.MEMBER").build();
+        WPermission modifyShelfs = WPermission.builder().code("MODIFY_SHELFS").build();
 //        warehouseGroupPermissionRepository.saveAll(List.of(addMember, removeMember));
 //        warehouseGroupPermissionRepository.flush();
 

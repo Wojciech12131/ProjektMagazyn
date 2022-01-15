@@ -2,6 +2,7 @@ package pl.edu.pk.mag.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.edu.pk.mag.controllers.ModifyStorageLocation;
 import pl.edu.pk.mag.exceptions.AppException;
 import pl.edu.pk.mag.exceptions.ApplicationException;
 import pl.edu.pk.mag.repository.*;
@@ -10,6 +11,7 @@ import pl.edu.pk.mag.requests.warehouse.AddUserToWarehouse;
 import pl.edu.pk.mag.requests.warehouse.CreateWarehouse;
 import pl.edu.pk.mag.responses.*;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,6 +32,9 @@ public class WarehouseService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private StorageLocationRepository storageLocationRepository;
 
     public void createNewWarehouse(CreateWarehouse createWarehouse) {
         if (warehouseRepository.existsWarehouseByCode(createWarehouse.getCode()))
@@ -162,7 +167,55 @@ public class WarehouseService {
         StorageLocationResponse storageLocationResponse = new StorageLocationResponse();
         storageLocationResponse.setCode(storageLocation.getCode());
         storageLocationResponse.setQuantity(storageLocation.getQuantity());
-        storageLocationResponse.setProduct(new ProductResponse(productRepository.getById(storageLocation.getProductId())));
+        if (storageLocation.getProductId() != null)
+            storageLocationResponse.setProduct(new ProductResponse(productRepository.getById(storageLocation.getProductId())));
         return storageLocationResponse;
     }
+
+    public void modifyStorageLocation(ModifyStorageLocation modifyStorageLocation, String whCode) {
+        validateModifyBody(modifyStorageLocation);
+        Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
+        StorageLocation storageLocation = storageLocationRepository
+                .getStorageLocationByCodeAndWarehouseId(modifyStorageLocation.getCode(), warehouse.getId()).orElseThrow(AppException.NOT_FOUND_SHELF::getError);
+        if (modifyStorageLocation.isRemoveProduct())
+            removeProductFromStorage(storageLocation);
+        if (modifyStorageLocation.getMoveProduct() != null)
+            moveProductToAnotherLocation(modifyStorageLocation, storageLocation, warehouse);
+        if (modifyStorageLocation.getAddProduct() != null)
+            addProductToStorageLocation(modifyStorageLocation, storageLocation);
+        storageLocationRepository.save(storageLocation);
+    }
+
+    private void removeProductFromStorage(StorageLocation storageLocation) {
+        storageLocation.setProductId(null);
+        storageLocation.setQuantity(new BigDecimal("0.000"));
+    }
+
+    private void validateModifyBody(ModifyStorageLocation modifyStorageLocation) {
+        if (modifyStorageLocation.isRemoveProduct() &&
+                modifyStorageLocation.getMoveProduct() != null && modifyStorageLocation.getMoveProduct().getDestinationShelfCode() != null)
+            throw AppException.REMOVE_AND_MOVE_NOT_POSSIBLE.getError();
+    }
+
+    private void moveProductToAnotherLocation(ModifyStorageLocation modifyStorageLocation, StorageLocation storageLocation, Warehouse warehouse) {
+        StorageLocation targetStorageLocation = storageLocationRepository
+                .getStorageLocationByCodeAndWarehouseId(modifyStorageLocation.getMoveProduct().getDestinationShelfCode(), warehouse.getId()).orElseThrow(AppException.NOT_FOUND_DESTINATION_SHELF::getError);
+        if (targetStorageLocation.getProductId() != null)
+            throw AppException.DESTINATION_SHELF_IS_NOT_EMPTY.getError();
+        targetStorageLocation.setProductId(storageLocation.getProductId());
+        targetStorageLocation.setQuantity(storageLocation.getQuantity());
+        storageLocation.setProductId(null);
+        storageLocation.setQuantity(new BigDecimal("0.000"));
+        storageLocationRepository.save(targetStorageLocation);
+    }
+
+    private void addProductToStorageLocation(ModifyStorageLocation modifyStorageLocation, StorageLocation storageLocation) {
+        Product product = productRepository.getProductByCode(modifyStorageLocation.getAddProduct().getCode()).orElse(
+                productRepository.save(new Product(modifyStorageLocation.getAddProduct().getCode(), modifyStorageLocation.getAddProduct().getDesc())));
+        if (0 == 0)
+            throw AppException.NOT_FOUND_BOOK.getError();
+        storageLocation.setProductId(product.getId());
+        storageLocation.setQuantity(modifyStorageLocation.getAddProduct().getQuantity());
+    }
+
 }

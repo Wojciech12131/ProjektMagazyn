@@ -15,11 +15,12 @@ import java.math.BigDecimal;
 @Setter
 @ToString
 public class StorageLocation extends BaseEntity {
+    @Column(length = 50)
     private String code;
 
     @JoinColumn(name = "warehouse_id")
     @Column(name = "warehouse_id")
-    private Long WarehouseId;
+    private Long warehouseId;
 
     @JoinColumn(name = "product_id")
     @Column(name = "product_id")

@@ -3,6 +3,7 @@ package pl.edu.pk.mag.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pk.mag.requests.warehouse.AddUserToWarehouse;
 import pl.edu.pk.mag.requests.warehouse.CreateWarehouse;
@@ -45,6 +46,14 @@ public class WarehouseApi {
     @PreAuthorize(value = "@warehouseService.isMemberOfWh(#principal.getName(),#whCode)||hasAuthority('WAREHOUSE.GET.STORAGE.LOCATION')")
     public ResponseEntity<?> getWarehouseStorageLocation(Principal principal, @PathVariable String whCode) {
         return ResponseEntity.ok(warehouseService.getWarehouseStorageLocation(whCode));
+    }
+
+    @PostMapping(path = "/code/{whCode}/modifyShelf")
+    @PreAuthorize(value = "@warehouseService.isMemberAndHavePermission(#principal.getName(),#whCode,'MODIFY_SHELFS')||hasAuthority('WAREHOUSE.GET.STORAGE.LOCATION')")
+    @Transactional
+    public ResponseEntity<?> modifyWarehouseStorageLocation(Principal principal, @RequestBody @Valid ModifyStorageLocation modifyStorageLocation, @PathVariable String whCode) {
+        warehouseService.modifyStorageLocation(modifyStorageLocation, whCode);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping(path = "/myWh")
