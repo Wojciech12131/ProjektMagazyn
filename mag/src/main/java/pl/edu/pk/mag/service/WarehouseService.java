@@ -117,7 +117,7 @@ public class WarehouseService {
         Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
         Set<WarehouseGroup> warehouseGroups = warehouse.getWarehouseGroup();
         List<WarehouseMembers> warehouseMembers = new ArrayList<>();
-        warehouseGroups.stream().forEach(
+        warehouseGroups.forEach(
                 warehouseGroup ->
                 {
                     WarehouseMembers warehouseMember = new WarehouseMembers(
@@ -156,11 +156,6 @@ public class WarehouseService {
         } catch (ApplicationException applicationException) {
             return false;
         }
-    }
-
-    public List<StorageLocationResponse> getWarehouseStorageLocation(String whCode) {
-        Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
-        return warehouse.getStorageLocations().stream().map(this::toStorageLocationResponse).collect(Collectors.toList());
     }
 
     public StorageLocationResponse toStorageLocationResponse(StorageLocation storageLocation) {
@@ -212,10 +207,32 @@ public class WarehouseService {
     private void addProductToStorageLocation(ModifyStorageLocation modifyStorageLocation, StorageLocation storageLocation) {
         Product product = productRepository.getProductByCode(modifyStorageLocation.getAddProduct().getCode()).orElse(
                 productRepository.save(new Product(modifyStorageLocation.getAddProduct().getCode(), modifyStorageLocation.getAddProduct().getDesc())));
-        if (0 == 0)
-            throw AppException.NOT_FOUND_BOOK.getError();
         storageLocation.setProductId(product.getId());
         storageLocation.setQuantity(modifyStorageLocation.getAddProduct().getQuantity());
     }
 
+    public List<StorageLocationResponse> getWarehouseStorageLocation(String whCode) {
+        Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
+        return warehouse.getStorageLocations().stream().map(this::toStorageLocationResponse).collect(Collectors.toList());
+    }
+
+    public List<StorageLocationResponse> getWarehouseStorageLocationByProduct(String whCode, String productCode) {
+        Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
+        Product product = productRepository.getProductByCode(productCode).orElseThrow(AppException.NOT_FOUND_PRODUCT::getError);
+
+        return storageLocationRepository
+                .getStorageLocationByWarehouseIdAndProductId(warehouse.getId(), product.getId())
+                .stream()
+                .map(this::toStorageLocationResponse)
+                .collect(Collectors.toList());
+    }
+
+    public void addNewShelf(String whCode, String shelfCode) {
+        Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
+        if (shelfCode == null || shelfCode.equals(""))
+            throw AppException.SHELF_CODE_ID_EMPTY_OR_NULL.getError();
+        if (storageLocationRepository.existsStorageLocationByWarehouseIdAndCode(warehouse.getId(), shelfCode))
+            throw AppException.SHELF_ALREADY_EXISTED.getError();
+        storageLocationRepository.save(new StorageLocation(shelfCode, warehouse.getId(), null, new BigDecimal("0.000")));
+    }
 }

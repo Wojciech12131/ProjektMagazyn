@@ -31,7 +31,10 @@ public class WarehouseApi {
 
     @PostMapping(path = "/code/{whCode}/addUser")
     @PreAuthorize(value = "hasAuthority('WAREHOUSE.ADD.USER')||@warehouseService.isMemberAndHavePermission(#principal.getName(),#whCode,'ADD.MEMBER')")
-    public ResponseEntity<?> addUserToWarehouse(Principal principal, @RequestBody @Valid AddUserToWarehouse addUserToWarehouse, @PathVariable(name = "whCode", required = true) String whCode) {
+    public ResponseEntity<?> addUserToWarehouse(
+            Principal principal,
+            @RequestBody @Valid AddUserToWarehouse addUserToWarehouse,
+            @PathVariable(name = "whCode") String whCode) {
         warehouseService.addUserToWarehouse(addUserToWarehouse, whCode);
         return ResponseEntity.noContent().build();
     }
@@ -56,6 +59,19 @@ public class WarehouseApi {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping(path = "/code/{whCode}/addShelf")
+    @PreAuthorize(value = "@warehouseService.isMemberAndHavePermission(#principal.getName(),#whCode,'MODIFY_SHELFS')||hasAuthority('WAREHOUSE.GET.STORAGE.LOCATION')")
+    public ResponseEntity<?> addShelf(@PathVariable(name = "whCode") String whCode, @RequestParam(name = "shelfCode") String shelfCode) {
+        warehouseService.addNewShelf(whCode, shelfCode);
+        return ResponseEntity.ok(warehouseService.getWarehouseStorageLocationByProduct(whCode, shelfCode));
+    }
+
+    @GetMapping(path = "/code/{whCode}/SearchByProduct")
+    @PreAuthorize(value = "@warehouseService.isMemberOfWh(#principal.getName(),#whCode)||hasAuthority('WAREHOUSE.GET.MEMBER')")
+    public ResponseEntity<?> getShelvesByProduct(@PathVariable(name = "whCode") String whCode, @RequestParam(name = "name") String productCode) {
+        return ResponseEntity.ok(warehouseService.getWarehouseStorageLocationByProduct(whCode, productCode));
+    }
+
     @GetMapping(path = "/myWh")
     public ResponseEntity<?> getMyWarehouseList(Principal principal) {
         List<WarehouseListResponse> list = new ArrayList<>();
@@ -68,4 +84,6 @@ public class WarehouseApi {
     public ResponseEntity<?> getWarehouseList() {
         return ResponseEntity.ok(warehouseService.getWarehouseList());
     }
+
+
 }

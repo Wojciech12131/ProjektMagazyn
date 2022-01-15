@@ -13,7 +13,10 @@ public enum AppException {
     REMOVE_AND_MOVE_NOT_POSSIBLE("REMOVE_AND_MOVE_NOT_POSSIBLE", 400, "Nie można jednocześnie usunąć i przenieść gdzieś indziej produktu."),
     NOT_FOUND_SHELF("NOT_FOUND_SHELF", 404, "Nie znaleziono wskazanej półki w danym magazynie"),
     NOT_FOUND_DESTINATION_SHELF("NOT_FOUND_DESTINATION_SHELF", 404, "Nie znaleziono półki docelowej"),
-    DESTINATION_SHELF_IS_NOT_EMPTY("DESTINATION_SHELF_IS_NOT_EMPTY", 400, "Na docelowej półce znajduję się już produkt.");
+    DESTINATION_SHELF_IS_NOT_EMPTY("DESTINATION_SHELF_IS_NOT_EMPTY", 400, "Na docelowej półce znajduję się już produkt."),
+    NOT_FOUND_PRODUCT("NOT_FOUND_PRODUCT", 404, ""),
+    SHELF_CODE_ID_EMPTY_OR_NULL("SHELF_CODE_ID_EMPTY_OR_NULL", 400, ""),
+    SHELF_ALREADY_EXISTED("SHELF_ALREADY_EXISTED", 400, "Istnieje już półka o danym kodzie.");
 
 
     final ApplicationException applicationException;
