@@ -22,7 +22,7 @@ public class WarehouseGroup extends BaseEntity {
     @Column(name = "user_id")
     private Long userId;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private List<WPermission> wPermissions;
 
 }

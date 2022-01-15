@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serial;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -30,5 +31,8 @@ public class Warehouse extends BaseEntity {
     @JoinColumn(name = "warehouse_id")
     private Set<WarehouseGroup> warehouseGroup;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "warehouse_id")
+    private Set<StorageLocation> storageLocations = new HashSet<>();
 
 }

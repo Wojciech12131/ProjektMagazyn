@@ -41,7 +41,13 @@ public class WarehouseApi {
         return ResponseEntity.ok(warehouseService.getWarehouseMembers(whCode));
     }
 
-    @GetMapping(path = "/myWh")
+    @GetMapping(path = "/code/{whCode}")
+    @PreAuthorize(value = "@warehouseService.isMemberOfWh(#principal.getName(),#whCode)||hasAuthority('WAREHOUSE.GET.STORAGE.LOCATION')")
+    public ResponseEntity<?> getWarehouseStorageLocation(Principal principal, @PathVariable String whCode) {
+        return ResponseEntity.ok(warehouseService.getWarehouseStorageLocation(whCode));
+    }
+
+    @GetMapping(path = "/code/myWh")
     public ResponseEntity<?> getMyWarehouseList(Principal principal) {
         List<WarehouseListResponse> list = new ArrayList<>();
         if (principal.getName() != null)

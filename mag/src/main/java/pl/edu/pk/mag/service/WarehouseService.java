@@ -4,18 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pk.mag.exceptions.AppException;
 import pl.edu.pk.mag.exceptions.ApplicationException;
-import pl.edu.pk.mag.repository.UserRepository;
-import pl.edu.pk.mag.repository.WarehouseGroupPermissionRepository;
-import pl.edu.pk.mag.repository.WarehouseGroupRepository;
-import pl.edu.pk.mag.repository.WarehouseRepository;
+import pl.edu.pk.mag.repository.*;
 import pl.edu.pk.mag.repository.entity.*;
 import pl.edu.pk.mag.requests.warehouse.AddUserToWarehouse;
 import pl.edu.pk.mag.requests.warehouse.CreateWarehouse;
-import pl.edu.pk.mag.responses.AddressResponse;
-import pl.edu.pk.mag.responses.WarehouseListResponse;
-import pl.edu.pk.mag.responses.WarehouseMembers;
+import pl.edu.pk.mag.responses.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class WarehouseService {
@@ -31,6 +27,9 @@ public class WarehouseService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     public void createNewWarehouse(CreateWarehouse createWarehouse) {
         if (warehouseRepository.existsWarehouseByCode(createWarehouse.getCode()))
@@ -152,5 +151,18 @@ public class WarehouseService {
         } catch (ApplicationException applicationException) {
             return false;
         }
+    }
+
+    public List<StorageLocationResponse> getWarehouseStorageLocation(String whCode) {
+        Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
+        return warehouse.getStorageLocations().stream().map(this::toStorageLocationResponse).collect(Collectors.toList());
+    }
+
+    public StorageLocationResponse toStorageLocationResponse(StorageLocation storageLocation) {
+        StorageLocationResponse storageLocationResponse = new StorageLocationResponse();
+        storageLocationResponse.setCode(storageLocation.getCode());
+        storageLocationResponse.setQuantity(storageLocation.getQuantity());
+        storageLocationResponse.setProduct(new ProductResponse(productRepository.getById(storageLocation.getProductId())));
+        return storageLocationResponse;
     }
 }
