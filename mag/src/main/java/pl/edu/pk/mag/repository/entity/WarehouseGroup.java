@@ -22,7 +22,12 @@ public class WarehouseGroup extends BaseEntity {
     @Column(name = "user_id")
     private Long userId;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            joinColumns = {@JoinColumn(name = "warehouse_group_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "wpermission_id", referencedColumnName = "id")},
+            name = "GROUP_PERMISSION"
+    )
     private List<WPermission> wPermissions;
 
 }

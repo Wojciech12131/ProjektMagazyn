@@ -52,8 +52,8 @@ public class StartupListener implements ApplicationListener<ContextStartedEvent>
 
         WPermission addMember = WPermission.builder().code("ADD.MEMBER").build();
         WPermission removeMember = WPermission.builder().code("REMOVE.MEMBER").build();
-        warehouseGroupPermissionRepository.saveAll(List.of(addMember, removeMember));
-        warehouseGroupPermissionRepository.flush();
+//        warehouseGroupPermissionRepository.saveAll(List.of(addMember, removeMember));
+//        warehouseGroupPermissionRepository.flush();
 
         roleRepository.saveAndFlush(role);
 
@@ -65,8 +65,6 @@ public class StartupListener implements ApplicationListener<ContextStartedEvent>
         user.getAddress().setEmail("test@test.pl");
         user.setRoles(Set.of(role));
         user = userRepository.saveAndFlush(user);
-
-        User user1 = new User();
 
         Warehouse warehouse = new Warehouse();
         warehouse.setCode("testWh");
@@ -93,6 +91,6 @@ public class StartupListener implements ApplicationListener<ContextStartedEvent>
         StorageLocation storageLocation5 = new StorageLocation("02C", warehouse.getId(), product2.getId(), new BigDecimal("3.44"));
         storageLocationRepository.saveAll(List.of(storageLocation, storageLocation1, storageLocation2, storageLocation3, storageLocation4, storageLocation5));
 
-        warehouseGroupRepository.saveAndFlush(new WarehouseGroup(warehouse.getId(), user.getId(), warehouseGroupPermissionRepository.findAll()));
+        warehouseGroupRepository.saveAndFlush(new WarehouseGroup(warehouse.getId(), user.getId(), List.of(addMember, removeMember)));
     }
 }
