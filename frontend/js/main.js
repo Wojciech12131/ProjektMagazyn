@@ -9,7 +9,8 @@ function login() {
     http_request.onload = function (xhr) {
         if (xhr.target.status === 200) {
             const data = JSON.parse(xhr.target.response);
-            setCookie("access_token", data, 1);
+            setCookie("access_token", data.access_token, 1);
+            location.href = "warehouseList.html"
         } else {
             handleExceptions(xhr.target.response);
             showError();

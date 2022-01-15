@@ -1,4 +1,4 @@
-var url = "http://localhost:8000/mag/myWh";
+var url = "http://localhost:8000/mag/warehouse/myWh";
 
 function loadWarehouseList() {
     let http_request = new XMLHttpRequest();
@@ -22,7 +22,12 @@ function loadWarehouseList() {
             showError();
         }
     };
+    console.log(getCookie('access_token'));
     http_request.open('GET', url, true);
+    if (getCookie('access_token') !== null && getCookie('access_token') !== "") {
+        http_request.setRequestHeader('Authorization', 'Bearer ' + getCookie('access_token'));
+    }
+    else location.href = "index.html";
     http_request.send(null);
 }
 
@@ -46,26 +51,7 @@ function setTable(data) {
 
 function logout() {
     delete_cookie("access_token");
-    let http_request = new XMLHttpRequest();
-    http_request.withCredentials = true;
-    http_request.onload = function (xhr) {
-        if (xhr.target.status === 204) {
-            clearError();
-            console.log("Logout successful")
-            location.href = "index.html"
-        } else if (xhr.target.status === 403) {
-            if (data.errorCode === "ACCESS_DENIED") {
-                data.errorMessage = "Session expired, login again"
-                handleExceptions(JSON.stringify(data));
-            }
-            location.href = "index.html"
-        } else {
-            handleExceptions(xhr.target.response);
-            showError();
-        }
-    };
-    http_request.open('GET', logoutUrl, true);
-    http_request.send(null);
+    location.href = "index.html";
 }
 
 function getCookie(name) {
@@ -99,10 +85,10 @@ class Address {
     }
 }
 
-function testowa() {
-    var adres = new Address("Kraków")
-    var magazyn1 = new Warehouse("01","cośtam",adres);
-    var magazyn2 = new Warehouse("02","cośtu",adres);
-    var lista = [magazyn1,magazyn2];
-    setTable(lista);
-}
+// function testowa() {
+//     var adres = new Address("Kraków")
+//     var magazyn1 = new Warehouse("01","cośtam",adres);
+//     var magazyn2 = new Warehouse("02","cośtu",adres);
+//     var lista = [magazyn1,magazyn2];
+//     setTable(lista);
+// }
