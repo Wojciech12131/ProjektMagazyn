@@ -40,11 +40,12 @@ public class User extends BaseEntity {
     private Set<Role> roles;
 
     @JoinColumn(name = "address_id", referencedColumnName = "id")
-    @OneToOne(fetch = FetchType.LAZY, targetEntity = Address.class, cascade = CascadeType.PERSIST)
+    @OneToOne(fetch = FetchType.EAGER, targetEntity = Address.class, cascade = CascadeType.PERSIST)
     private Address address;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
+    @ToString.Exclude
     private Set<WarehouseGroup> warehouseGroups;
 
     @Override

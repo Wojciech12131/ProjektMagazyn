@@ -10,6 +10,7 @@ import pl.edu.pk.mag.repository.entity.*;
 import pl.edu.pk.mag.requests.warehouse.AddUserToWarehouse;
 import pl.edu.pk.mag.requests.warehouse.CreateWarehouse;
 import pl.edu.pk.mag.requests.warehouse.PatchWarehouse;
+import pl.edu.pk.mag.requests.warehouse.WarehouseAddress;
 import pl.edu.pk.mag.responses.*;
 
 import java.math.BigDecimal;
@@ -256,11 +257,20 @@ public class WarehouseService {
             warehouse.setDescription(patchWarehouse.getDescription());
         }
         if (patchWarehouse.getAddress() != null)
-            patchWarehouseAddress(patchWarehouse, warehouse);
+            patchWarehouseAddress(patchWarehouse.getAddress(), warehouse);
         warehouseRepository.save(warehouse);
     }
 
-    private void patchWarehouseAddress(PatchWarehouse patchWarehouse, Warehouse warehouse) {
+    private void patchWarehouseAddress(WarehouseAddress warehouseAddress, Warehouse warehouse) {
+        if (warehouseAddress.getCity() != null)
+            warehouse.getAddress().setCity(warehouseAddress.getCity());
+        if (warehouseAddress.getMobile() != null)
+            warehouse.getAddress().setMobile(warehouseAddress.getMobile());
+        if (warehouseAddress.getEmail() != null)
+            warehouse.getAddress().setEmail(warehouseAddress.getEmail());
+        if (warehouseAddress.getStreet() != null)
+            warehouse.getAddress().setStreet(warehouseAddress.getStreet());
+
 
     }
 
