@@ -53,6 +53,7 @@ public class WarehouseApi {
     }
 
     @PatchMapping(path = "/code/{whCode}")
+    @Transactional
     @PreAuthorize(value = "@warehouseService.isMemberAndHavePermission(#principal.getName(),#whCode,'MODIFY_WAREHOUSE')||hasAuthority('WAREHOUSE.CREATE.NEW')")
     public ResponseEntity<?> modifyWarehouse(Principal principal, @PathVariable String whCode, @RequestBody @Valid PatchWarehouse patchWarehouse) {
         warehouseService.patchWarehouse(patchWarehouse, whCode);
@@ -73,6 +74,15 @@ public class WarehouseApi {
         warehouseService.addNewShelf(whCode, shelfCode);
         return ResponseEntity.noContent().build();
     }
+
+    @Transactional
+    @DeleteMapping(path = "/code/{whCode}/removeShelf")
+    @PreAuthorize(value = "@warehouseService.isMemberAndHavePermission(#principal.getName(),#whCode,'MODIFY_SHELFS')||hasAuthority('WAREHOUSE.GET.STORAGE.LOCATION')")
+    public ResponseEntity<?> removeShelf(Principal principal, @PathVariable(name = "whCode") String whCode, @RequestParam(name = "shelfCode") String shelfCode) {
+        warehouseService.removeShelf(whCode, shelfCode);
+        return ResponseEntity.noContent().build();
+    }
+
 
     @GetMapping(path = "/code/{whCode}/SearchByProduct")
     @PreAuthorize(value = "@warehouseService.isMemberOfWh(#principal.getName(),#whCode)||hasAuthority('WAREHOUSE.GET.MEMBER')")

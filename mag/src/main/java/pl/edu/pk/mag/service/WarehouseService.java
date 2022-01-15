@@ -242,9 +242,9 @@ public class WarehouseService {
     }
 
     public void addNewShelf(String whCode, String shelfCode) {
-        Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
         if (shelfCode == null || shelfCode.equals(""))
             throw AppException.SHELF_CODE_ID_EMPTY_OR_NULL.getError();
+        Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
         if (storageLocationRepository.existsStorageLocationByWarehouseIdAndCode(warehouse.getId(), shelfCode))
             throw AppException.SHELF_ALREADY_EXISTED.getError();
         storageLocationRepository.save(new StorageLocation(shelfCode, warehouse.getId(), null, new BigDecimal("0.000")));
@@ -255,5 +255,22 @@ public class WarehouseService {
         if (patchWarehouse.getDescription() != null) {
             warehouse.setDescription(patchWarehouse.getDescription());
         }
+        if (patchWarehouse.getAddress() != null)
+            patchWarehouseAddress(patchWarehouse, warehouse);
+        warehouseRepository.save(warehouse);
+    }
+
+    private void patchWarehouseAddress(PatchWarehouse patchWarehouse, Warehouse warehouse) {
+
+    }
+
+    public void removeShelf(String whCode, String shelfCode) {
+        if (shelfCode == null || shelfCode.equals(""))
+            throw AppException.SHELF_CODE_ID_EMPTY_OR_NULL.getError();
+        Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
+        StorageLocation storageLocation = storageLocationRepository.getStorageLocationByCodeAndWarehouseId(shelfCode, warehouse.getId()).orElseThrow(AppException.NOT_FOUND_SHELF::getError);
+        if (storageLocation.getProductId() != null)
+            throw AppException.SHELF_IS_NOT_EMPTY.getError();
+        storageLocationRepository.delete(storageLocation);
     }
 }
