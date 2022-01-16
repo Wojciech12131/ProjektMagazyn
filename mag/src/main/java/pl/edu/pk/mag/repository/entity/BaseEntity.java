@@ -1,6 +1,9 @@
 package pl.edu.pk.mag.repository.entity;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -16,7 +19,7 @@ import java.util.Objects;
 @ToString
 @MappedSuperclass
 @NoArgsConstructor
-public class BaseEntity implements Serializable {
+public class BaseEntity implements Serializable, Cloneable {
     @Serial
     private static final long serialVersionUID = 12315234L;
 
@@ -44,5 +47,20 @@ public class BaseEntity implements Serializable {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    @Override
+    public Object clone() {
+        BaseEntity baseEntity;
+        try {
+            baseEntity = (BaseEntity) super.clone();
+        } catch (CloneNotSupportedException e) {
+            baseEntity = new BaseEntity();
+            baseEntity.setId(id);
+            baseEntity.setCreatedOn(createdOn);
+            baseEntity.setUpdatedOn(updatedOn);
+            baseEntity.setVersion(version);
+        }
+        return baseEntity;
     }
 }
