@@ -12,6 +12,7 @@ import pl.edu.pk.mag.requests.warehouse.CreateWarehouse;
 import pl.edu.pk.mag.requests.warehouse.PatchWarehouse;
 import pl.edu.pk.mag.requests.warehouse.WarehouseAddress;
 import pl.edu.pk.mag.responses.*;
+import pl.edu.pk.mag.service.audit.AuditModificationService;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -38,6 +39,9 @@ public class WarehouseService {
 
     @Autowired
     private StorageLocationRepository storageLocationRepository;
+
+    @Autowired
+    private AuditModificationService auditModificationService;
 
     public void createNewWarehouse(CreateWarehouse createWarehouse) {
         if (warehouseRepository.existsWarehouseByCode(createWarehouse.getCode()))
@@ -175,6 +179,7 @@ public class WarehouseService {
         Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
         StorageLocation storageLocation = storageLocationRepository
                 .getStorageLocationByCodeAndWarehouseId(modifyStorageLocation.getCode(), warehouse.getId()).orElseThrow(AppException.NOT_FOUND_SHELF::getError);
+        StorageLocation oldObject = (StorageLocation) storageLocation.clone();
         if (modifyStorageLocation.isRemoveProduct())
             removeProductFromStorage(storageLocation);
         if (modifyStorageLocation.getMoveProduct() != null)
@@ -183,6 +188,7 @@ public class WarehouseService {
             addProductToStorageLocation(modifyStorageLocation, storageLocation);
         if (modifyStorageLocation.getAddProduct() != null)
             addQuantityToProduct(modifyStorageLocation, storageLocation);
+        auditModificationService.beforeModification(oldObject, storageLocation);
         storageLocationRepository.save(storageLocation);
     }
 
@@ -210,12 +216,14 @@ public class WarehouseService {
     private void moveProductToAnotherLocation(ModifyStorageLocation modifyStorageLocation, StorageLocation storageLocation, Warehouse warehouse) {
         StorageLocation targetStorageLocation = storageLocationRepository
                 .getStorageLocationByCodeAndWarehouseId(modifyStorageLocation.getMoveProduct().getDestinationShelfCode(), warehouse.getId()).orElseThrow(AppException.NOT_FOUND_DESTINATION_SHELF::getError);
+        StorageLocation oldObject = (StorageLocation) targetStorageLocation.clone();
         if (targetStorageLocation.getProductId() != null)
             throw AppException.DESTINATION_SHELF_IS_NOT_EMPTY.getError();
         targetStorageLocation.setProductId(storageLocation.getProductId());
         targetStorageLocation.setQuantity(storageLocation.getQuantity());
         storageLocation.setProductId(null);
         storageLocation.setQuantity(new BigDecimal("0.000"));
+        auditModificationService.beforeModification(oldObject, targetStorageLocation);
         storageLocationRepository.save(targetStorageLocation);
     }
 
@@ -253,11 +261,13 @@ public class WarehouseService {
 
     public void patchWarehouse(PatchWarehouse patchWarehouse, String whCode) {
         Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
+        Warehouse oldObject = (Warehouse) warehouse.clone();
         if (patchWarehouse.getDescription() != null) {
             warehouse.setDescription(patchWarehouse.getDescription());
         }
         if (patchWarehouse.getAddress() != null)
             patchWarehouseAddress(patchWarehouse.getAddress(), warehouse);
+        auditModificationService.beforeModification(oldObject, warehouse);
         warehouseRepository.save(warehouse);
     }
 
@@ -281,6 +291,7 @@ public class WarehouseService {
         StorageLocation storageLocation = storageLocationRepository.getStorageLocationByCodeAndWarehouseId(shelfCode, warehouse.getId()).orElseThrow(AppException.NOT_FOUND_SHELF::getError);
         if (storageLocation.getProductId() != null)
             throw AppException.SHELF_IS_NOT_EMPTY.getError();
+        auditModificationService.beforeRemoveStorageLocation(storageLocation);
         storageLocationRepository.delete(storageLocation);
     }
 }

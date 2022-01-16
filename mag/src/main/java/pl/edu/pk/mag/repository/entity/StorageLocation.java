@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @ToString
-public class StorageLocation extends BaseEntity {
+public class StorageLocation extends BaseEntity implements Cloneable {
     @Column(length = 50)
     private String code;
 
@@ -29,5 +29,16 @@ public class StorageLocation extends BaseEntity {
     @Column(precision = 19, scale = 3)
     private BigDecimal quantity = new BigDecimal("0.000");
 
+    @Override
+    public Object clone() {
+        StorageLocation storageLocation;
 
+        try {
+            storageLocation = (StorageLocation) super.clone();
+        } catch (Exception e) {
+            storageLocation = new StorageLocation(code, warehouseId, productId, quantity);
+        }
+        storageLocation.setQuantity(quantity);
+        return storageLocation;
+    }
 }

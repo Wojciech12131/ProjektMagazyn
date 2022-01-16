@@ -14,7 +14,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-public class Warehouse extends BaseEntity {
+public class Warehouse extends BaseEntity implements Cloneable {
     @Serial
     private static final long serialVersionUID = 11322512L;
 
@@ -24,15 +24,30 @@ public class Warehouse extends BaseEntity {
     private String description;
 
     @JoinColumn(name = "address_id", referencedColumnName = "id")
-    @OneToOne(fetch = FetchType.LAZY, targetEntity = Address.class, cascade = CascadeType.PERSIST)
+    @OneToOne(fetch = FetchType.EAGER, targetEntity = Address.class, cascade = CascadeType.PERSIST)
     private Address address;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "warehouse_id")
+    @ToString.Exclude
     private Set<WarehouseGroup> warehouseGroup;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "warehouse_id")
+    @ToString.Exclude
     private Set<StorageLocation> storageLocations = new HashSet<>();
+
+    @Override
+    public Object clone() {
+        Warehouse warehouse = null;
+        try {
+            warehouse = (Warehouse) super.clone();
+            warehouse.setAddress((Address) address.clone());
+        } catch (Exception e) {
+            warehouse = new Warehouse(code, description, (Address) address.clone(), warehouseGroup, storageLocations);
+        }
+
+        return warehouse;
+    }
 
 }
