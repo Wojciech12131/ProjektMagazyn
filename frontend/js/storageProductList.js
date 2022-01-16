@@ -14,7 +14,7 @@ function loadProductList() {
             if (data.errorCode === "ACCESS_DENIED") {
                 data.errorMessage = "Session expired, login again"
                 handleExceptions(JSON.stringify(data));
-                location.href = "oldunusedindex.html"
+                location.href = "index.html"
             }
             handleExceptions(JSON.stringify(data));
             showError();
@@ -29,7 +29,7 @@ function loadProductList() {
     if (getCookie('access_token') !== null && getCookie('access_token') !== "") {
         http_request.setRequestHeader('Authorization', 'Bearer ' + getCookie('access_token'));
     }
-    else location.href = "oldunusedindex.html";
+    else location.href = "index.html";
     http_request.send(null);
 }
 
@@ -76,7 +76,7 @@ function addShelf(){
                 if (data.errorCode === "ACCESS_DENIED") {
                     data.errorMessage = "Session expired, login again"
                     handleExceptions(JSON.stringify(data));
-                    location.href = "oldunusedindex.html"
+                    location.href = "index.html"
                 }
                 handleExceptions(JSON.stringify(data));
                 showError();
@@ -92,7 +92,7 @@ function addShelf(){
     if (getCookie('access_token') !== null && getCookie('access_token') !== "") {
         http_request.setRequestHeader('Authorization', 'Bearer ' + getCookie('access_token'));
     }
-    else location.href = "oldunusedindex.html";
+    else location.href = "index.html";
     http_request.send(null);
 }
 
@@ -124,7 +124,7 @@ function addingSection(code) {
 
 function logout() {
     delete_cookie("access_token");
-    location.href = 'oldunusedindex.html';
+    location.href = 'index.html';
 }
 
 function removeElement(element) {

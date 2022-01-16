@@ -10,7 +10,7 @@ function login() {
         if (xhr.target.status === 200) {
             const data = JSON.parse(xhr.target.response);
             setCookie("access_token", data.access_token, 1);
-            location.href = "warehouseList.html"
+            location.href = "customerPanel.html"
         } else {
             handleExceptions(xhr.target.response);
             showError();
@@ -28,7 +28,7 @@ function register() {
     var body;
     http_request.onload = function (xhr) {
         if (xhr.target.status === 204) {
-            location.href = "oldunusedindex.html";
+            location.href = "index.html";
         } else {
             handleExceptions(xhr.target.response);
             showError();

@@ -27,7 +27,7 @@ function Submit() {
     http_request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     if (getCookie('access_token') !== null && getCookie('access_token') !== "") {
         http_request.setRequestHeader('Authorization', 'Bearer ' + getCookie('access_token'));
-    } else location.href = "oldunusedindex.html";
+    } else location.href = "index.html";
     http_request.send(JSON.stringify(body))
 
 }
