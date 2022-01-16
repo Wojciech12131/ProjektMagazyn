@@ -81,7 +81,7 @@ public class OrderService {
                             orderResponse.setBasketItems(
                                     order.getBasketItem().stream().map(basketItem -> {
                                         BasketItemRequest basketItemRequest = new BasketItemRequest();
-                                        basketItemRequest.setQuantity(basketItemRequest.getQuantity());
+                                        basketItemRequest.setQuantity(basketItem.getQuantity());
                                         basketItemRequest.setProductCode(
                                                 productRepository.getById(basketItem.getProductId()).getCode()
                                         );
@@ -101,7 +101,7 @@ public class OrderService {
         try {
             id = Long.parseLong(orderId);
         } catch (NumberFormatException e) {
-            throw new ApplicationException("NUMBER_FORMAT", 400, "Id zamówienia musi być listą ");
+            throw new ApplicationException("NUMBER_FORMAT", 400, "Id zamówienia musi być liczbą.");
         }
         Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
         UserOrder order = orderRepository.getOrderByWarehouseIdAndId(warehouse.getId(), id).orElseThrow(AppException.NOT_FOUND_ORDER::getError);
