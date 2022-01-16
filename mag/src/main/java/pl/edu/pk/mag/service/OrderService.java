@@ -16,6 +16,7 @@ import pl.edu.pk.mag.repository.entity.enums.OrderStatus;
 import pl.edu.pk.mag.requests.BasketItemRequest;
 import pl.edu.pk.mag.requests.OrderRequest;
 import pl.edu.pk.mag.responses.OrderResponse;
+import pl.edu.pk.mag.service.mailHandler.EmailService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +35,9 @@ public class OrderService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     public void createOrder(OrderRequest orderRequest, String username) {
         User user = userRepository.getUserByUsername(username).orElseThrow(AppException.NOT_FOUND_USER::getError);
@@ -56,7 +60,22 @@ public class OrderService {
                             return basketItem;
                         }).collect(Collectors.toList())
         );
-        orderRepository.save(userOrder);
+        UserOrder order = orderRepository.save(userOrder);
+        try {
+
+
+            if (user.getAddress().getEmail() != null) {
+                emailService.sendSimpleMessage(
+                        user.getAddress().getEmail(), "Złożono zamówienie o numerze " + order.getId(),
+                        "Złożono zamównienie na następujące produkty: \n" +
+                                orderRequest.getBasketItem().stream().map(basketItem -> "* " + basketItem.getProductCode() + ", ilość: " + basketItem.getQuantity()).collect(Collectors.joining("\n")) + "\n" +
+                                "Dziękujemy za złożone zamówienie."
+                );
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public List<OrderResponse> getOrderByWarehouse(String whCode) {
