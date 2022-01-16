@@ -294,4 +294,11 @@ public class WarehouseService {
         auditModificationService.beforeRemoveStorageLocation(storageLocation);
         storageLocationRepository.delete(storageLocation);
     }
+
+    public List<ProductResponse> getProductsList() {
+        return productRepository.findAll().stream().map(
+                product -> new ProductResponse(product.getCode(), product.getDescription())
+        ).collect(Collectors.toList());
+
+    }
 }

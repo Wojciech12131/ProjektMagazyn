@@ -135,6 +135,11 @@ public class WarehouseApi {
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping(path = "/productList")
+    public ResponseEntity<?> getProductsList() {
+        return ResponseEntity.ok(warehouseService.getProductsList());
+    }
+
 
     @GetMapping
     public ResponseEntity<?> getWarehouseList() {
