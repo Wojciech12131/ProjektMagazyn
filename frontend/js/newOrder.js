@@ -23,7 +23,7 @@ function loadAllProductList() {
             showError();
         }
     };
-    console.log(getCookie('access_token'));
+    
     http_request.open('GET', url, true);
     if (getCookie('access_token') !== null && getCookie('access_token') !== "") {
         http_request.setRequestHeader('Authorization', 'Bearer ' + getCookie('access_token'));
@@ -75,7 +75,7 @@ function orderProduct(data) {
             showError();
         }
     };
-    console.log(getCookie('access_token'));
+    
     http_request.open('POST', url2, true);
     if (getCookie('access_token') !== null && getCookie('access_token') !== "") {
         http_request.setRequestHeader('Authorization', 'Bearer ' + getCookie('access_token'));

@@ -1,5 +1,5 @@
 var url = "http://localhost:8000/mag/warehouse/myOrders";
-
+export{getCookie, delete_cookie, order}
 function loadAllWarehouseList() {
     let http_request = new XMLHttpRequest();
     http_request.withCredentials = true;
@@ -22,7 +22,7 @@ function loadAllWarehouseList() {
             showError();
         }
     };
-    console.log(getCookie('access_token'));
+    
     http_request.open('GET', url, true);
     if (getCookie('access_token') !== null && getCookie('access_token') !== "") {
         http_request.setRequestHeader('Authorization', 'Bearer ' + getCookie('access_token'));
@@ -66,6 +66,7 @@ function getCookie(name) {
 
 function delete_cookie(name) {
     document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    return name;
 }
 
 function order(element){
@@ -73,6 +74,7 @@ function order(element){
     let id = p.firstElementChild.textContent;
     sessionStorage.setItem('code', id);
     location.href = "storageProductList.html";
+    return id;
 }
 
 class Warehouse {

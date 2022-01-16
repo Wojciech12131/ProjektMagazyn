@@ -22,7 +22,7 @@ function loadAllWarehouseList() {
             showError();
         }
     };
-    console.log(getCookie('access_token'));
+    
     http_request.open('GET', url, true);
     if (getCookie('access_token') !== null && getCookie('access_token') !== "") {
         http_request.setRequestHeader('Authorization', 'Bearer ' + getCookie('access_token'));

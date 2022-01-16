@@ -2,7 +2,8 @@
   "name": "projekt_ajax",
   "version": "4.2.1",
   "scripts": {
-    "start": "node_modules\\.bin\\gulp watch"
+    "start": "node_modules\\.bin\\gulp watch",
+    "test": "jest"
   },
   "description": "A basic HTML starter template for Bootstrap",
   "keywords": [
