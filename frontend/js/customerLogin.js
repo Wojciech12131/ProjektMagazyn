@@ -1,4 +1,5 @@
 const url = "http://localhost:8000/oauth/token";
+export {setCookie}
 
 function login() {
     const url = "http://localhost:8000/oauth/token";
@@ -73,4 +74,6 @@ function setCookie(cname, cvalue, exdays) {
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     let expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    return cvalue;
 }
+

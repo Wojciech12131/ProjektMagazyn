@@ -23,7 +23,7 @@ function loadWarehouseMember() {
                 showError();
             }
         };
-        console.log(getCookie('access_token'));
+        
         http_request.open('GET', url.replace("{code}", whCode), true);
         if (getCookie('access_token') !== null && getCookie('access_token') !== "") {
             http_request.setRequestHeader('Authorization', 'Bearer ' + getCookie('access_token'));
@@ -56,7 +56,7 @@ function removeMember(data) {
             showError();
         }
     };
-    console.log(getCookie('access_token'));
+    
     http_request.open('DELETE', url.replace("{code}", whCode) + "?username=" + username, true);
     if (getCookie('access_token') !== null && getCookie('access_token') !== "") {
         http_request.setRequestHeader('Authorization', 'Bearer ' + getCookie('access_token'));

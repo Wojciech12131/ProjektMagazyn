@@ -1,3 +1,4 @@
+export {denyOrder, acceptOrder}
 function loadAllWarehouseList() {
     var url = "http://localhost:8000/mag/warehouse/code/{whCode}/orders";
     let http_request = new XMLHttpRequest();
@@ -21,7 +22,7 @@ function loadAllWarehouseList() {
             showError();
         }
     };
-    console.log(getCookie('access_token'));
+    
     if (sessionStorage.getItem('code') !== null && sessionStorage.getItem('code') !== "") {
         http_request.open('GET', url.replace("{whCode}", sessionStorage.getItem('code')), true);
     }
@@ -61,11 +62,14 @@ function acceptOrder(button) {
     var url = "http://localhost:8000/mag/warehouse/code/{whCode}/orders/accept";
     let http_request = new XMLHttpRequest();
     let id = button.parentNode.parentNode.firstElementChild.textContent;
+    let testid;
     http_request.withCredentials = true;
     http_request.onreadystatechange = function (xhr) {
         if (xhr.target.status === 200) {
             clearError();
             loadAllWarehouseList();
+            testid = 0;
+            return testid;
         } else if (xhr.target.status === 403) {
             let data = JSON.parse(xhr.target.response);
             if (data.errorCode === "ACCESS_DENIED") {
@@ -80,7 +84,7 @@ function acceptOrder(button) {
             showError();
         }
     };
-    console.log(getCookie('access_token'));
+    
     if (sessionStorage.getItem('code') !== null && sessionStorage.getItem('code') !== "") {
         http_request.open('GET', url.replace("{whCode}", sessionStorage.getItem('code')) + "?orderId=" + id, true);
     }
@@ -94,12 +98,14 @@ function denyOrder(button) {
     var url = "http://localhost:8000/mag/warehouse/code/{whCode}/orders/reject";
     let http_request = new XMLHttpRequest();
     let id = button.parentNode.parentNode.firstElementChild.textContent;
-
+    let testid;
     http_request.withCredentials = true;
     http_request.onreadystatechange = function (xhr) {
         if (xhr.target.status === 200) {
             clearError();
             loadAllWarehouseList();
+            testid = 0;
+            return testid;
         } else if (xhr.target.status === 403) {
             let data = JSON.parse(xhr.target.response);
             if (data.errorCode === "ACCESS_DENIED") {
@@ -114,7 +120,7 @@ function denyOrder(button) {
             showError();
         }
     };
-    console.log(getCookie('access_token'));
+    
     if (sessionStorage.getItem('code') !== null && sessionStorage.getItem('code') !== "") {
         http_request.open('GET', url.replace("{whCode}", sessionStorage.getItem('code')) + "?orderId=" + id, true);
     }
