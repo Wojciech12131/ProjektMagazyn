@@ -102,7 +102,7 @@ public class WarehouseApi {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(path = "/myOrder")
+    @GetMapping(path = "/myOrders")
     public ResponseEntity<?> myOrder(Principal principal) {
         return ResponseEntity.ok(orderService.getOrderByUsername(principal.getName()));
     }
