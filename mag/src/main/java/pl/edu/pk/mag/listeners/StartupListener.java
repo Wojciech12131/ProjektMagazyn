@@ -52,7 +52,7 @@ public class StartupListener implements ApplicationListener<ContextStartedEvent>
 
         WPermission addMember = WPermission.builder().code("ADD.MEMBER").build();
         WPermission removeMember = WPermission.builder().code("REMOVE.MEMBER").build();
-        WPermission modifyShelves = WPermission.builder().code("MODIFY_SHELFS").build();
+        WPermission modifyShelves = WPermission.builder().code("MODIFY_SHELVES").build();
         WPermission modifyWarehouse = WPermission.builder().code("MODIFY_WAREHOUSE").build();
 
         roleRepository.saveAndFlush(role);

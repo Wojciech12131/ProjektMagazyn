@@ -186,7 +186,7 @@ public class WarehouseService {
             moveProductToAnotherLocation(modifyStorageLocation, storageLocation, warehouse);
         if (modifyStorageLocation.getAddProduct() != null)
             addProductToStorageLocation(modifyStorageLocation, storageLocation);
-        if (modifyStorageLocation.getAddProduct() != null)
+        if (modifyStorageLocation.getAddQuantity() != null)
             addQuantityToProduct(modifyStorageLocation, storageLocation);
         auditModificationService.beforeModification(oldObject, storageLocation);
         storageLocationRepository.save(storageLocation);
