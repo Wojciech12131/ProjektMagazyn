@@ -5,12 +5,15 @@ import org.springframework.stereotype.Service;
 import pl.edu.pk.mag.exceptions.AppException;
 import pl.edu.pk.mag.exceptions.ApplicationException;
 import pl.edu.pk.mag.repository.OrderRepository;
+import pl.edu.pk.mag.repository.ProductRepository;
 import pl.edu.pk.mag.repository.UserRepository;
 import pl.edu.pk.mag.repository.WarehouseRepository;
+import pl.edu.pk.mag.repository.dto.BasketItem;
 import pl.edu.pk.mag.repository.entity.User;
 import pl.edu.pk.mag.repository.entity.UserOrder;
 import pl.edu.pk.mag.repository.entity.Warehouse;
 import pl.edu.pk.mag.repository.entity.enums.OrderStatus;
+import pl.edu.pk.mag.requests.BasketItemRequest;
 import pl.edu.pk.mag.requests.OrderRequest;
 import pl.edu.pk.mag.responses.OrderResponse;
 
@@ -29,8 +32,31 @@ public class OrderService {
     @Autowired
     private UserRepository userRepository;
 
-    public void createOrder(OrderRequest orderRequest, String username) {
+    @Autowired
+    private ProductRepository productRepository;
 
+    public void createOrder(OrderRequest orderRequest, String username) {
+        User user = userRepository.getUserByUsername(username).orElseThrow(AppException.NOT_FOUND_USER::getError);
+        Warehouse warehouse = warehouseRepository.getWarehouseByCode(orderRequest.getWarehouseCode()).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
+        createOrder(orderRequest, user, warehouse);
+
+    }
+
+    private void createOrder(OrderRequest orderRequest, User user, Warehouse warehouse) {
+        UserOrder userOrder = new UserOrder();
+        userOrder.setUserId(user.getId());
+        userOrder.setOrderStatus(OrderStatus.PENDING);
+        userOrder.setWarehouseId(warehouse.getId());
+        userOrder.setBasketItem(
+                orderRequest.getBasketItem().stream()
+                        .map(basketItemRequest -> {
+                            BasketItem basketItem = new BasketItem();
+                            basketItem.setQuantity(basketItemRequest.getQuantity());
+                            basketItem.setProductId(productRepository.getProductByCode(basketItemRequest.getProductCode()).orElseThrow(AppException.NOT_FOUND_PRODUCT::getError).getId());
+                            return basketItem;
+                        }).collect(Collectors.toList())
+        );
+        orderRepository.save(userOrder);
     }
 
     public List<OrderResponse> getOrderByWarehouse(String whCode) {
@@ -52,7 +78,16 @@ public class OrderService {
                 .map(order -> {
                             OrderResponse orderResponse = new OrderResponse();
                             orderResponse.setOrderStatus(order.getOrderStatus().toString());
-                            orderResponse.setBasketItems(order.getBasketItem());
+                            orderResponse.setBasketItems(
+                                    order.getBasketItem().stream().map(basketItem -> {
+                                        BasketItemRequest basketItemRequest = new BasketItemRequest();
+                                        basketItemRequest.setQuantity(basketItemRequest.getQuantity());
+                                        basketItemRequest.setProductCode(
+                                                productRepository.getById(basketItem.getProductId()).getCode()
+                                        );
+                                        return basketItemRequest;
+                                    }).collect(Collectors.toList())
+                            );
                             orderResponse.setWarehouseCode(warehouseRepository.getWarehouseById(order.getWarehouseId()).getCode());
                             orderResponse.setOrderId(order.getId());
                             orderResponse.setCreateDate(order.getCreatedOn());
@@ -73,5 +108,6 @@ public class OrderService {
         if (!order.getOrderStatus().equals(OrderStatus.PENDING))
             throw AppException.INVALID_ORDER_STATUS.getError();
         order.setOrderStatus(approved);
+        orderRepository.save(order);
     }
 }

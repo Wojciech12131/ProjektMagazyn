@@ -67,7 +67,7 @@ public class WarehouseApi {
     }
 
     @PostMapping(path = "/code/{whCode}/modifyShelf")
-    @PreAuthorize(value = "@warehouseService.isMemberAndHavePermission(#principal.getName(),#whCode,'MODIFY_SHELFS')||hasAuthority('WAREHOUSE.GET.STORAGE.LOCATION')")
+    @PreAuthorize(value = "@warehouseService.isMemberAndHavePermission(#principal.getName(),#whCode,'MODIFY_SHELVES')||hasAuthority('WAREHOUSE.GET.STORAGE.LOCATION')")
     @Transactional
     public ResponseEntity<?> modifyWarehouseStorageLocation(Principal principal, @RequestBody @Valid ModifyStorageLocation modifyStorageLocation, @PathVariable String whCode) {
         warehouseService.modifyStorageLocation(modifyStorageLocation, whCode);
@@ -75,7 +75,7 @@ public class WarehouseApi {
     }
 
     @GetMapping(path = "/code/{whCode}/addShelf")
-    @PreAuthorize(value = "@warehouseService.isMemberAndHavePermission(#principal.getName(),#whCode,'MODIFY_SHELFS')||hasAuthority('WAREHOUSE.GET.STORAGE.LOCATION')")
+    @PreAuthorize(value = "@warehouseService.isMemberAndHavePermission(#principal.getName(),#whCode,'MODIFY_SHELVES')||hasAuthority('WAREHOUSE.GET.STORAGE.LOCATION')")
     public ResponseEntity<?> addShelf(Principal principal, @PathVariable(name = "whCode") String whCode, @RequestParam(name = "shelfCode") String shelfCode) {
         warehouseService.addNewShelf(whCode, shelfCode);
         return ResponseEntity.noContent().build();
@@ -83,7 +83,7 @@ public class WarehouseApi {
 
     @Transactional
     @DeleteMapping(path = "/code/{whCode}/removeShelf")
-    @PreAuthorize(value = "@warehouseService.isMemberAndHavePermission(#principal.getName(),#whCode,'MODIFY_SHELFS')||hasAuthority('WAREHOUSE.GET.STORAGE.LOCATION')")
+    @PreAuthorize(value = "@warehouseService.isMemberAndHavePermission(#principal.getName(),#whCode,'MODIFY_SHELVES')||hasAuthority('WAREHOUSE.GET.STORAGE.LOCATION')")
     public ResponseEntity<?> removeShelf(Principal principal, @PathVariable(name = "whCode") String whCode, @RequestParam(name = "shelfCode") String shelfCode) {
         warehouseService.removeShelf(whCode, shelfCode);
         return ResponseEntity.noContent().build();
@@ -102,7 +102,7 @@ public class WarehouseApi {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(path = "/MyOrder")
+    @GetMapping(path = "/myOrder")
     public ResponseEntity<?> myOrder(Principal principal) {
         return ResponseEntity.ok(orderService.getOrderByUsername(principal.getName()));
     }

@@ -3,7 +3,7 @@ package pl.edu.pk.mag.responses;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.edu.pk.mag.repository.dto.BasketItem;
+import pl.edu.pk.mag.requests.BasketItemRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,5 +21,5 @@ public class OrderResponse {
 
     private String orderStatus;
 
-    private List<BasketItem> basketItems;
+    private List<BasketItemRequest> basketItems;
 }
