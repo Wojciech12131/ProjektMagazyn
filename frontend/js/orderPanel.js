@@ -13,7 +13,7 @@ function loadAllWarehouseList() {
             if (data.errorCode === "ACCESS_DENIED") {
                 data.errorMessage = "Session expired, login again"
                 handleExceptions(JSON.stringify(data));
-                location.href = "index.html"
+                location.href = "oldunusedindex.html"
             }
             handleExceptions(JSON.stringify(data));
             showError();
@@ -27,7 +27,7 @@ function loadAllWarehouseList() {
     if (getCookie('access_token') !== null && getCookie('access_token') !== "") {
         http_request.setRequestHeader('Authorization', 'Bearer ' + getCookie('access_token'));
     }
-    else location.href = "index.html";
+    else location.href = "oldunusedindex.html";
     http_request.send(null);
 }
 
@@ -63,7 +63,7 @@ function denyOrder() {
 // "<td>" + ((val.description===null) ? "":val.description) + "</td>
 function logout() {
     delete_cookie("access_token");
-    location.href = "index.html";
+    location.href = "oldunusedindex.html";
 }
 
 function getCookie(name) {

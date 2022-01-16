@@ -28,7 +28,7 @@ function register() {
     var body;
     http_request.onload = function (xhr) {
         if (xhr.target.status === 204) {
-            location.href = "index.html";
+            location.href = "oldunusedindex.html";
         } else {
             handleExceptions(xhr.target.response);
             showError();

@@ -14,7 +14,7 @@ function loadWarehouseMember() {
                 if (data.errorCode === "ACCESS_DENIED") {
                     data.errorMessage = "Session expired, login again"
                     handleExceptions(JSON.stringify(data));
-                    location.href = "index.html"
+                    location.href = "oldunusedindex.html"
                 }
                 handleExceptions(JSON.stringify(data));
                 showError();
@@ -27,7 +27,7 @@ function loadWarehouseMember() {
         http_request.open('GET', url.replace("{code}", whCode), true);
         if (getCookie('access_token') !== null && getCookie('access_token') !== "") {
             http_request.setRequestHeader('Authorization', 'Bearer ' + getCookie('access_token'));
-        } else location.href = "index.html";
+        } else location.href = "oldunusedindex.html";
         sessionStorage.setItem("lastSearch", whCode);
         http_request.send(null);
     }
@@ -47,7 +47,7 @@ function removeMember(data) {
             if (data.errorCode === "ACCESS_DENIED") {
                 data.errorMessage = "Session expired, login again"
                 handleExceptions(JSON.stringify(data));
-                location.href = "index.html"
+                location.href = "oldunusedindex.html"
             }
             handleExceptions(JSON.stringify(data));
             showError();
@@ -60,7 +60,7 @@ function removeMember(data) {
     http_request.open('DELETE', url.replace("{code}", whCode) + "?username=" + username, true);
     if (getCookie('access_token') !== null && getCookie('access_token') !== "") {
         http_request.setRequestHeader('Authorization', 'Bearer ' + getCookie('access_token'));
-    } else location.href = "index.html";
+    } else location.href = "oldunusedindex.html";
     sessionStorage.setItem("lastSearch", whCode);
     http_request.send(null);
 }
@@ -85,7 +85,7 @@ function setTable(data) {
 
 function logout() {
     delete_cookie("access_token");
-    location.href = "index.html";
+    location.href = "oldunusedindex.html";
 }
 
 function getCookie(name) {

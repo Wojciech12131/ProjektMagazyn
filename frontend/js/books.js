@@ -15,7 +15,7 @@ function loadBookList() {
             if (data.errorCode === "ACCESS_DENIED") {
                 data.errorMessage = "Brak sesji, proszę zalogować się ponownie"
                 handleExceptions(JSON.stringify(data));
-                location.href = "index.html"
+                location.href = "oldunusedindex.html"
             }
             handleExceptions(JSON.stringify(data));
             showError();
@@ -80,13 +80,13 @@ function logout() {
         if (xhr.target.status === 204) {
             clearError();
             console.log("Poprawnie wylogowano")
-            location.href = "index.html"
+            location.href = "oldunusedindex.html"
         } else if (xhr.target.status === 403) {
             if (data.errorCode === "ACCESS_DENIED") {
                 data.errorMessage = "Brak sesji, proszę zalogować się ponownie"
                 handleExceptions(JSON.stringify(data));
             }
-            location.href = "index.html"
+            location.href = "oldunusedindex.html"
         } else {
             handleExceptions(xhr.target.response);
             showError();
