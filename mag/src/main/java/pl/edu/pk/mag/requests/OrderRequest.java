@@ -2,7 +2,6 @@ package pl.edu.pk.mag.requests;
 
 
 import lombok.Data;
-import pl.edu.pk.mag.repository.dto.BasketItem;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -17,5 +16,5 @@ public class OrderRequest {
 
     @Valid
     @NotNull
-    private List<BasketItem> basketItem;
+    private List<BasketItemRequest> basketItem;
 }

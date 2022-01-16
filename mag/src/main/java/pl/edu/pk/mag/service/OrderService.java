@@ -7,8 +7,8 @@ import pl.edu.pk.mag.exceptions.ApplicationException;
 import pl.edu.pk.mag.repository.OrderRepository;
 import pl.edu.pk.mag.repository.UserRepository;
 import pl.edu.pk.mag.repository.WarehouseRepository;
-import pl.edu.pk.mag.repository.entity.Order;
 import pl.edu.pk.mag.repository.entity.User;
+import pl.edu.pk.mag.repository.entity.UserOrder;
 import pl.edu.pk.mag.repository.entity.Warehouse;
 import pl.edu.pk.mag.repository.entity.enums.OrderStatus;
 import pl.edu.pk.mag.requests.OrderRequest;
@@ -47,7 +47,7 @@ public class OrderService {
         return toOrderResponse(orderRepository.getOrderByUserId(user.getId()));
     }
 
-    private List<OrderResponse> toOrderResponse(List<Order> orderList) {
+    private List<OrderResponse> toOrderResponse(List<UserOrder> orderList) {
         return orderList.stream()
                 .map(order -> {
                             OrderResponse orderResponse = new OrderResponse();
@@ -69,7 +69,7 @@ public class OrderService {
             throw new ApplicationException("NUMBER_FORMAT", 400, "Id zamówienia musi być listą ");
         }
         Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
-        Order order = orderRepository.getOrderByWarehouseIdAndId(warehouse.getId(), id).orElseThrow(AppException.NOT_FOUND_ORDER::getError);
+        UserOrder order = orderRepository.getOrderByWarehouseIdAndId(warehouse.getId(), id).orElseThrow(AppException.NOT_FOUND_ORDER::getError);
         if (!order.getOrderStatus().equals(OrderStatus.PENDING))
             throw AppException.INVALID_ORDER_STATUS.getError();
         order.setOrderStatus(approved);

@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class Order extends BaseEntity {
+public class UserOrder extends BaseEntity {
     private Long userId;
 
     private Long warehouseId;
