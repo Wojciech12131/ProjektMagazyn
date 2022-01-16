@@ -15,7 +15,7 @@
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <meta content="" name="description">
     <meta content="" name="author">
-    <script src="js/whCreateNew.js" type="text/javascript"></script>
+    <script src="js/whAddUser.js" type="text/javascript"></script>
     <script src="js/handeException.js" type="text/javascript"></script>
     <title>Warehouse manager - register form</title>
 
@@ -45,13 +45,28 @@
                             }
                         </style>
                         <!--                        <label for="username">Nazwa użytkownika</label>-->
-                        <input class="form-control" id="codeWh" placeholder="Code" type="text">
+                        <input class="form-control" id="username" placeholder="Username" type="text">
                     </div>
                     <div class="form-group" style="margin-left: 25%; margin-right: 25%">
-                        <!--                        <label for="password">Hasło</label>-->
-                        <input class="form-control" id="descriptionWh" placeholder="Description" type="text">
+                        <input class="form-control" id="codeWh" placeholder="Warehouse code" type="text">
                     </div>
-                    <button class="btn btn-warning" onclick=Submit() type="submit" style="margin-left: 25%">
+                    <div class="form-group" style="margin-left: 27%; margin-right: 25%">
+                        <input class="form-check-input" type="checkbox" id="checkbox1" style="margin-top: 1%">
+                        <label class="form-check-label" for="checkbox1" style="color: whitesmoke; font-weight: bold; -webkit-text-stroke: 1px black; font-size: 130%">Permission to remove members</label>
+                    </div>
+                    <div class="form-group" style="margin-left: 27%; margin-right: 25%">
+                        <input class="form-check-input" type="checkbox" id="checkbox2" style="margin-top: 1%">
+                        <label class="form-check-label" for="checkbox2" style="color: whitesmoke; font-weight: bold; -webkit-text-stroke: 1px black; font-size: 130%">Permission to add members</label>
+                    </div>
+                    <div class="form-group" style="margin-left: 27%; margin-right: 25%">
+                        <input class="form-check-input" type="checkbox" id="checkbox3" style="margin-top: 1%">
+                        <label class="form-check-label" for="checkbox3" style="color: whitesmoke; font-weight: bold; -webkit-text-stroke: 1px black; font-size: 130%">Permission to modify shelves</label>
+                    </div>
+                    <div class="form-group" style="margin-left: 27%; margin-right: 25%">
+                        <input class="form-check-input" type="checkbox" id="checkbox4" style="margin-top: 1%">
+                        <label class="form-check-label" for="checkbox4" style="color: whitesmoke; font-weight: bold; -webkit-text-stroke: 1px black; font-size: 130%">Permission to modify warehouses</label>
+                    </div>
+                    <button class="btn btn-warning" onclick=addWarehouseToUser() type="submit" style="margin-left: 25%">
                         Submit
                     </button>
                     <button class="btn btn-warning" onclick="location.href='/warehouseList.html'" style="margin-left: 35.2%;">Go back</button>
