@@ -79,12 +79,12 @@ function extraPerms(list) {
         htmlList.push("whGetMember.html");
     }
     if (list.includes("WAREHOUSE.GET.STORAGE.LOCATION")) {
-        myList.push("Check products in WHs");
+        myList.push("List of all WHs");
         htmlList.push("whGetStorageLocation.html");
     }
     var button = "";
     for (let i=0; i<myList.length; i++) {
-        button = button + " <button class=\"btn btn-warning\" onclick= location.href="+htmlList[i]+">"+myList[i]+"</button>";
+        button = button + " <button class=\"btn btn-warning\" onclick= \"location.href=\'"+htmlList[i]+"\'\">"+myList[i]+"</button>";
     }
     document.getElementById("buttons").innerHTML = button;
 }

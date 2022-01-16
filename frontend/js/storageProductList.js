@@ -49,12 +49,19 @@ function setTable(data) {
             "<td>" + ((val.product===null) ? "": val.product.code) + "</td>" +
             "<td>" + val.quantity + "</td>" +
             "<td>" + ((val.product===null || val.product.description===null) ? "": val.product.description) + "</td>" +
-            "<td>" + "<i class=\"material-icons\" style='cursor: pointer;color: orange' onclick= location.href='editShelf.html'>edit</i>" + "</td>" +
+            "<td>" + "<i class=\"material-icons\" style='cursor: pointer;color: orange' onclick= 'editShelf(this)'>edit</i>" + "</td>" +
             "<td>" + "<i class=\"material-icons\" style='cursor: pointer;color: red' onclick='removeElement(this)'>remove</i>" + "</td>" +
             "</tr>"
     }).join('');
 }
-
+function editShelf(data) {
+    var p = data.parentNode.parentNode;
+    sessionStorage.setItem("shelfCode", p.children[0].textContent);
+    sessionStorage.setItem("productCode", p.children[1].textContent);
+    sessionStorage.setItem("productQuantity", p.children[2].textContent);
+    sessionStorage.setItem("productDescription", p.children[3].textContent);
+    location.href = "editShelf.html";
+}
 function addShelf(){
     let http_request = new XMLHttpRequest();
     http_request.withCredentials = true;
@@ -177,16 +184,11 @@ function delete_cookie(name) {
     document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
-function isAdminUser() {
-    return getCookie("ROLE") === "ROLE_ADMIN";
+function clearSessionStorage() {
+    sessionStorage.setItem('shelfCode', "");
+    sessionStorage.setItem('productCode', "");
+    sessionStorage.setItem('productQuantity', 0.0);
+    sessionStorage.setItem('productDescription', "");
 }
 
-class Book {
-    id;
 
-    constructor(title, author, year) {
-        this.title = title;
-        this.author = author;
-        this.year = year;
-    }
-}

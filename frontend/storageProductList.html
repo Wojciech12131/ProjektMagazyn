@@ -28,7 +28,7 @@
                 <div id="errorMsg">
                 </div>
 
-                <h2 class="mt-5 text-center" style="color:whitesmoke; margin-bottom: 50px">My warehouse list</h2>
+<!--                <h2 class="mt-5 text-center" style="color:whitesmoke; margin-bottom: 50px">My warehouse list</h2>-->
                 <table class="table table-hover table-light" style>
                     <thead>
                     <tr id="column"></tr>
@@ -40,6 +40,7 @@
                         <button class="btn btn-warning" onclick=logout() type="logout">
                             Logout
                         </button>
+                        <button class="btn btn-warning" onclick="location.href='warehouseList.html'"> Go back </button>
                     </div>
                     <div class="col-2 text-right" style="padding-right: 0">
                         <input id="input" type="text" class="form-control" placeholder="Shelf code">
@@ -56,6 +57,7 @@
 </div>
 
 <script>
+    clearSessionStorage();
     loadProductList();
     // testowa();
     showError();
