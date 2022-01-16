@@ -22,7 +22,7 @@ function login() {
 }
 
 function register() {
-    const url = "http://localhost:8000/mag/token";
+    const url = "http://localhost:8000/mag/user";
     let http_request = new XMLHttpRequest();
     http_request.withCredentials = true;
     var body;
@@ -49,7 +49,7 @@ function register() {
 class Address {
     constructor(mobile, mail) {
         this.mobile = mobile;
-        this.mail = mail;
+        this.email = mail;
     }
 }
 

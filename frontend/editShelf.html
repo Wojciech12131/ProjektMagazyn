@@ -13,114 +13,120 @@
     <link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
-    <div class="bg-image"
+<div class="bg-image"
      style="background-image: url('./img/fullhd.jpg');
             height:100vh;
             background-size: cover">
-        <div class="row h-25">
-            <div class="col-3"></div>
-            <div class="col-4">
-                <button class="btn btn-warning" onclick="logout()"> Logout </button>
-                <button class="btn btn-warning" onclick="location.href='storageProductList.html'"> Go back </button>
-            </div>
-        </div>
-        <div class="row h-25 align-content-end">
-            <div class="col-4 text-right">
-                <div class="col-3" style="margin-left: 76%">
-                <table class="table table-hover table-light text-center">
-                    <thead>
-                        <tr>
-                            <th scope="col"> Shelf Code </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <script>document.write(sessionStorage.getItem('shelfCode'))</script>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                </div>
-            </div>
-            <div class="col-4">
-                <table class="table table-hover table-light text-center" style="table-layout: fixed">
-                    <thead>
-                    <tr>
-                        <th scope="col"> Code </th>
-                        <th scope="col"> Quantity </th>
-                        <th scope="col"> Product Description </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>
-                            <script>document.write(sessionStorage.getItem('productCode'))</script>
-                        </td>
-                        <td>
-                            <script>document.write(sessionStorage.getItem('productQuantity'))</script>
-                        </td>
-                        <td>
-                            <script>document.write(sessionStorage.getItem('productDescription'));</script>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col4 text-left" style="margin-top: 0.5%; padding-left: 1%">
-                <input id="changeQuantity" type="text" class="form-control" placeholder="Product new quantity">
-                <button class="btn btn-success" onclick=changeQuantity() type="Add new quantity" style="margin-left: 15%; margin-top: 2%">
-                    Add new quantity
-                </button>
-            </div>
-        </div>
-        <div class="row h-50">
-            <div class="col-3 text-right">
-            </div>
-            <div class="col-4">
-                <table class="table table-hover table-light text-center" style="table-layout: fixed">
-                    <thead>
-                    <tr>
-                        <th scope="col"> Adding </th>
-                        <th scope="col"> Code </th>
-                        <th scope="col"> Quantity </th>
-                        <th scope="col"> Product Description </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row"> new product</th>
-                        <td style="padding-top: 1%; padding-bottom: 0">
-                            <input id="newProductCode" type="text" class="form-control">
-                        </td>
-                        <td style="padding-top: 1%; padding-bottom: 0">
-                            <input id="newProductQuantity" type="number" step="0.001" class="form-control">
-                        </td>
-                        <td style="padding-top: 1%; padding-bottom: 0">
-                            <input id="newProductDescription" type="text" class="form-control">
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-                <div>
-                    <div class="btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-secondary active" style="margin-top: 5%; background-color: transparent; border: none">
-                            <button type="button" class="btn btn-warning" data-toggle="button" aria-pressed="false" autocomplete="off">
-                                Move old product
-                            </button>
-                            <button type="button" class="btn btn-danger" data-toggle="button" aria-pressed="false" autocomplete="off">
-                                Delete old product
-                            </button>
-                        </label>
-                    </div>
-                    <div class="text-left" style="padding-left: 3.5%">
-                        <input id="newShelfCode" class="col-sm-4" type="text" class="form-control" placeholder="Shelf code" style="margin-left:6%; margin-right: 32%">
-                        <button class="btn btn-success">Submit</button>
-                    </div>
-                </div>
-
+    <div class="row h-25">
+        <div class="col-3"></div>
+        <div class="col-4">
+            <button class="btn btn-warning" onclick="logout()"> Logout</button>
+            <button class="btn btn-warning" onclick="location.href='storageProductList.html'"> Go back</button>
         </div>
     </div>
+    <div class="row h-25 align-content-end">
+        <div class="col-4 text-right">
+            <div class="col-3" style="margin-left: 76%">
+                <table class="table table-hover table-light text-center">
+                    <thead>
+                    <tr>
+                        <th scope="col"> Shelf Code</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <script>document.write(sessionStorage.getItem('shelfCode'))</script>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-4">
+            <table class="table table-hover table-light text-center" style="table-layout: fixed">
+                <thead>
+                <tr>
+                    <th scope="col"> Code</th>
+                    <th scope="col"> Quantity</th>
+                    <th scope="col"> Product Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <script>document.write(sessionStorage.getItem('productCode'))</script>
+                    </td>
+                    <td>
+                        <script>document.write(sessionStorage.getItem('productQuantity'))</script>
+                    </td>
+                    <td>
+                        <script>document.write(sessionStorage.getItem('productDescription'));</script>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col4 text-left" style="margin-top: 0.5%; padding-left: 1%">
+            <input class="form-control" id="changeQuantity" placeholder="Product new quantity" type="text">
+            <button class="btn btn-success" onclick=changeQuantity() style="margin-left: 15%; margin-top: 2%"
+                    type="Add new quantity">
+                Add new quantity
+            </button>
+        </div>
+    </div>
+    <div class="row h-50">
+        <div class="col-3 text-right">
+        </div>
+        <div class="col-4">
+            <table class="table table-hover table-light text-center" style="table-layout: fixed">
+                <thead>
+                <tr>
+                    <th scope="col"> Adding</th>
+                    <th scope="col"> Code</th>
+                    <th scope="col"> Quantity</th>
+                    <th scope="col"> Product Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row"> new product</th>
+                    <td style="padding-top: 1%; padding-bottom: 0">
+                        <input class="form-control" id="newProductCode" type="text">
+                    </td>
+                    <td style="padding-top: 1%; padding-bottom: 0">
+                        <input class="form-control" id="newProductQuantity" step="0.001" type="number">
+                    </td>
+                    <td style="padding-top: 1%; padding-bottom: 0">
+                        <input class="form-control" id="newProductDescription" type="text">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <div class="btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active"
+                       style="margin-top: 5%; background-color: transparent; border: none">
+                    <button aria-pressed="false" autocomplete="off" class="btn btn-warning"
+                            data-toggle="button" onclick="moveOldProductAndAddNewProduct()" type="button">
+                        Move old product
+                    </button>
+                    <button aria-pressed="false" autocomplete="off" class="btn btn-danger" data-toggle="button"
+                            onclick="deleteAndAddNewProduct()" type="button">
+                        Delete old product
+                    </button>
+                </label>
+            </div>
+            <div class="text-left" style="padding-left: 3.5%">
+                <input class="col-sm-4" class="form-control" id="newShelfCode" placeholder="Shelf code"
+                       style="margin-left:6%; margin-right: 32%"
+                       type="text">
+                <button class="btn btn-success" onclick="addNewProduct()">Submit</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 </body>
 </html>

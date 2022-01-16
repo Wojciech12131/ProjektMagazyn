@@ -1,17 +1,61 @@
 var url = "http://localhost:8000/mag/warehouse/code/";
 
+function changeQuantity() {
+    let http_request = setUpModifyShelfHttpRequest()
+    let sendQauntity = new ModifyShelf();
+    sendQauntity.code = sessionStorage.getItem('shelfCode');
+    sendQauntity.addQuantity = new AddQuantity(document.getElementById('changeQuantity').value);
+    http_request.send(JSON.stringify(sendQauntity));
+}
 
-    // if (sessionStorage.getItem('code') !== null && sessionStorage.getItem('code') !== "") {
-    //     http_request.open('POST', url + sessionStorage.getItem('code') + "/modifyShelf", true);
-    // }
+function deleteAndAddNewProduct() {
+    let http_request = setUpModifyShelfHttpRequest();
+    let sendQuantity = new ModifyShelf();
+    sendQuantity.removeProduct = true;
+    if (document.getElementById("newProductCode").value !== '')
+        setAddProduct(sendQuantity)
+    sendQuantity.code = sessionStorage.getItem('shelfCode');
+    http_request.send(JSON.stringify(sendQuantity));
+}
 
-function changeQuantity(){
+function addNewProduct() {
+    let http_request = setUpModifyShelfHttpRequest();
+    let sendQuantity = new ModifyShelf();
+    if (document.getElementById("newProductCode").value !== '') {
+        setAddProduct(sendQuantity)
+        sendQuantity.code = sessionStorage.getItem('shelfCode');
+        http_request.send(JSON.stringify(sendQuantity));
+    }
+}
+
+function moveOldProductAndAddNewProduct() {
+    let http_request = setUpModifyShelfHttpRequest();
+    let sendQuantity = new ModifyShelf();
+    if (document.getElementById("newShelfCode").value !== '') {
+        sendQuantity.moveProduct = new MoveProduct(document.getElementById("newShelfCode").value);
+        if (document.getElementById("newProductCode").value !== '')
+            setAddProduct(sendQuantity)
+        sendQuantity.code = sessionStorage.getItem('shelfCode');
+        http_request.send(JSON.stringify(sendQuantity));
+    }
+}
+
+function setAddProduct(sendQuantity) {
+    sendQuantity.addProduct = new AddProduct();
+    sendQuantity.addProduct.code = document.getElementById("newProductCode").value;
+    if (document.getElementById("newProductQuantity").value !== '')
+        sendQuantity.addProduct.quantity = document.getElementById("newProductQuantity").value
+    if (document.getElementById("newProductDescription").value !== '')
+        sendQuantity.addProduct.desc = document.getElementById("newProductDescription").value
+}
+
+function setUpModifyShelfHttpRequest() {
     let http_request = new XMLHttpRequest();
     http_request.withCredentials = true;
     http_request.onreadystatechange = function (xhr) {
-        if(http_request.readyState === 4) {
+        if (http_request.readyState === 4) {
             if (xhr.target.status === 204) {
-                location.href='storageProductList.html'
+                location.href = 'storageProductList.html'
                 clearError();
             } else if (xhr.target.status === 403) {
                 let data = JSON.parse(xhr.target.response);
@@ -33,15 +77,10 @@ function changeQuantity(){
     }
     if (getCookie('access_token') !== null && getCookie('access_token') !== "") {
         http_request.setRequestHeader('Authorization', 'Bearer ' + getCookie('access_token'));
-    }
-    else location.href = "index.html";
+    } else location.href = "index.html";
     http_request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    let sendQauntity = new ModifyShelf();
-    sendQauntity.code = sessionStorage.getItem('shelfCode');
-    sendQauntity.addQuantity = new AddQuantity(document.getElementById('changeQuantity').value);
-    http_request.send(JSON.stringify(sendQauntity));
+    return http_request;
 }
-
 
 
 function logout() {
@@ -60,10 +99,6 @@ function delete_cookie(name) {
     document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
-function isAdminUser() {
-    return getCookie("ROLE") === "ROLE_ADMIN";
-}
-
 class ModifyShelf {
     code;
     moveProduct;
@@ -71,21 +106,22 @@ class ModifyShelf {
     addQuantity;
     removeProduct;
 }
+
 class AddQuantity {
     constructor(quantity) {
-        this.quantity=quantity;
+        this.quantity = quantity;
     }
 }
 
 class MoveProduct {
     constructor(code) {
-        this.destinationShelfCode=code;
+        this.destinationShelfCode = code;
     }
 }
 
 class AddProduct {
     code;
-    dest;
+    desc;
     quantity;
 
     set code(value) {

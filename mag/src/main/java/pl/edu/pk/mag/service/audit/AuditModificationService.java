@@ -88,12 +88,22 @@ public class AuditModificationService {
         ) {
             field.setAccessible(true);
             try {
-                if (!field.get(oldObject).equals(field.get(newObject))) {
-                    auditRecordList.add(AuditRecord.builder()
-                            .fieldName(field.getName())
-                            .oldObject(String.valueOf(field.get(oldObject)))
-                            .newObject(String.valueOf(field.get(newObject)))
-                            .build());
+                if (field.get(oldObject) != null) {
+                    if (!field.get(oldObject).equals(field.get(newObject))) {
+                        auditRecordList.add(AuditRecord.builder()
+                                .fieldName(field.getName())
+                                .oldObject(String.valueOf(field.get(oldObject)))
+                                .newObject(String.valueOf(field.get(newObject)))
+                                .build());
+                    }
+                } else {
+                    if (field.get(newObject) != null) {
+                        auditRecordList.add(AuditRecord.builder()
+                                .fieldName(field.getName())
+                                .oldObject(String.valueOf(field.get(oldObject)))
+                                .newObject(String.valueOf(field.get(newObject)))
+                                .build());
+                    }
                 }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
