@@ -21,7 +21,8 @@ public enum AppException {
     ADD_QUANTITY_IS_NOT_POSSIBLE("ADD_QUANTITY_IS_NOT_POSSIBLE", 400, "Nie można dodać ilości do edytowanego produku."),
     SHELF_IS_NOT_EMPTY("SHELF_IS_NOT_EMPTY", 400, "Półka zawiera produkt, proszę się go pozbyć przed daną akcją."),
     NOT_FOUND_ORDER("NOT_FOUND_ORDER", 404, "Nie znaleziono podanego zamówienia."),
-    INVALID_ORDER_STATUS("INVALID_ORDER_STATUS", 400, "Podane zamównie ma nieprawidłowy status.");
+    INVALID_ORDER_STATUS("INVALID_ORDER_STATUS", 400, "Podane zamównie ma nieprawidłowy status."),
+    NOT_FOUND_MEMBER("NOT_FOUND_MEMBER", 404, "Nie znaleziono użytkownika w podanej grupie.");
 
 
     final ApplicationException applicationException;

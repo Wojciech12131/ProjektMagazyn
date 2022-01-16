@@ -22,7 +22,7 @@ public class WarehouseGroup extends BaseEntity {
     @Column(name = "user_id")
     private Long userId;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(
             joinColumns = {@JoinColumn(name = "warehouse_group_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "wpermission_id", referencedColumnName = "id")},

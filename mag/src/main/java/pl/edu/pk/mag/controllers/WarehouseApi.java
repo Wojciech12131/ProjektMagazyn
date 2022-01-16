@@ -46,10 +46,17 @@ public class WarehouseApi {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(path = "/code/{whCode}/getMembers")
+    @GetMapping(path = "/code/{whCode}/members")
     @PreAuthorize(value = "@warehouseService.isMemberOfWh(#principal.getName(),#whCode)||hasAuthority('WAREHOUSE.GET.MEMBER')")
     public ResponseEntity<?> getWarehouseMembers(Principal principal, @PathVariable String whCode) {
         return ResponseEntity.ok(warehouseService.getWarehouseMembers(whCode));
+    }
+
+    @DeleteMapping(path = "/code/{whCode}/members")
+    @PreAuthorize(value = "@warehouseService.isMemberAndHavePermission(#principal.getName(),#whCode,'REMOVE.MEMBER')||hasAuthority('WAREHOUSE.GET.MEMBER')")
+    public ResponseEntity<?> removeWarehouseMember(Principal principal, @PathVariable String whCode, @RequestParam(name = "username") String username) {
+        warehouseService.removeWarehouseMember(username, whCode);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(path = "/code/{whCode}")

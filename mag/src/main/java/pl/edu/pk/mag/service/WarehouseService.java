@@ -301,4 +301,18 @@ public class WarehouseService {
         ).collect(Collectors.toList());
 
     }
+
+    public void removeWarehouseMember(String username, String whCode) {
+        Warehouse warehouse = warehouseRepository.getWarehouseByCode(whCode).orElseThrow(AppException.NOT_FOUND_WAREHOUSE::getError);
+        User user = userRepository.getUserByUsername(username).orElseThrow(AppException.NOT_FOUND_USER::getError);
+
+        WarehouseGroup warehouseGroup = warehouse.getWarehouseGroup()
+                .stream()
+                .filter(wGroup -> wGroup.getUserId().equals(user.getId()))
+                .findFirst().orElseThrow(AppException.NOT_FOUND_MEMBER::getError);
+        warehouse.getWarehouseGroup().remove(warehouseGroup);
+        user.getWarehouseGroups().remove(warehouseGroup);
+        warehouseGroupRepository.deleteById(warehouseGroup.getId());
+
+    }
 }

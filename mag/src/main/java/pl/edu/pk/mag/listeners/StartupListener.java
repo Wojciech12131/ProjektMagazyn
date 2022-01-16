@@ -50,10 +50,10 @@ public class StartupListener implements ApplicationListener<ContextStartedEvent>
         permissionRepository.saveAndFlush(warehouseGetStorage);
         Role role = new Role("admin", Set.of(warehouseCreateNew, warehouseAddMember, warehouseGetMember, warehouseGetStorage));
 
-        WPermission addMember = WPermission.builder().code("ADD.MEMBER").build();
-        WPermission removeMember = WPermission.builder().code("REMOVE.MEMBER").build();
-        WPermission modifyShelves = WPermission.builder().code("MODIFY_SHELVES").build();
-        WPermission modifyWarehouse = WPermission.builder().code("MODIFY_WAREHOUSE").build();
+        WPermission addMember = warehouseGroupPermissionRepository.save(WPermission.builder().code("ADD.MEMBER").build());
+        WPermission removeMember = warehouseGroupPermissionRepository.save(WPermission.builder().code("REMOVE.MEMBER").build());
+        WPermission modifyShelves = warehouseGroupPermissionRepository.save(WPermission.builder().code("MODIFY_SHELVES").build());
+        WPermission modifyWarehouse = warehouseGroupPermissionRepository.save(WPermission.builder().code("MODIFY_WAREHOUSE").build());
 
         roleRepository.saveAndFlush(role);
 
